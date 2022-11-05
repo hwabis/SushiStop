@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "SushiStop.sln",
+    "projects": [
+      "SushiStop.Game\\SushiStop.Game.csproj",
+      "SushiStop.Resources\\SushiStop.Resources.csproj",
+      "SushiStop.iOS\\SushiStop.iOS.csproj"
+    ]
+  }
+}
