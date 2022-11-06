@@ -6,6 +6,8 @@ namespace SushiStop.Server
 {
     public class SushiStopServer : TcpServer
     {
+        public int PlayerCount = 0;
+
         public SushiStopServer(IPAddress address, int port)
             : base(address, port)
         {

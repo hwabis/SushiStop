@@ -6,7 +6,7 @@ namespace SushiStop.Server
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Enter port:");
+            Console.Write("Enter port: ");
             string? portString = Console.ReadLine();
             if (int.TryParse(portString, out int port))
                 Console.WriteLine($"TCP server port: {port}");
@@ -21,22 +21,17 @@ namespace SushiStop.Server
             // Start the server
             Console.Write("Server starting... ");
             server.Start();
-            Console.WriteLine("Done!");
+            Console.WriteLine("Done! Press return to end the server.");
 
-            // Perform text input
-            for (; ; )
+            while (true)
             {
                 string? line = Console.ReadLine();
                 if (string.IsNullOrEmpty(line))
                     break;
-
-                // Multicast admin message to all sessions
-                line = "(admin) " + line;
-                server.Multicast(line);
             }
 
             // Stop the server
-            Console.Write("Server stopping...");
+            Console.Write("Server stopping... ");
             server.Stop();
             Console.WriteLine("Done!");
         }

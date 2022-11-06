@@ -1,36 +1,66 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using NetCoreServer;
+using Newtonsoft.Json;
+using SushiStop.Game.Networking;
 
 namespace SushiStop.Server
 {
     public class SushiStopSession : TcpSession
     {
-        public SushiStopSession(TcpServer server) : base(server)
+        private SushiStopServer server;
+
+        public SushiStopSession(SushiStopServer server) : base(server)
         {
+            this.server = server;
         }
 
         protected override void OnConnected()
         {
             Console.WriteLine($"TCP session with Id {Id} connected!");
+            server.PlayerCount++;
         }
 
         protected override void OnDisconnected()
         {
             Console.WriteLine($"TCP session with Id {Id} disconnected!");
+            server.PlayerCount--;
         }
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
-            string message = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
-            Console.WriteLine("Incoming: " + message);
+            string messageString = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
+            Console.WriteLine("Incoming: " + messageString);
 
-            // Multicast message to all connected sessions
-            Server.Multicast(message);
+            TcpMessage? message = JsonConvert.DeserializeObject<TcpMessage>(messageString);
+            if (message == null)
+            {
+                Console.WriteLine($"Received a message that failed to be deserialized");
+                return;
+            }
 
-            // If the buffer starts with '!' the disconnect the current session
-            if (message == "!")
-                Disconnect();
+            switch (message.Type)
+            {
+                case TcpMessageType.PlayerNumberRequest:
+                    if (server.PlayerCount == 5)
+                    {
+                        // We're already at the max player limit
+                        Disconnect();
+                        break;
+                    }
+
+                    Console.WriteLine("Sending plyaer number: " + server.PlayerCount);
+                    SendAsync(JsonConvert.SerializeObject(new TcpMessage
+                    {
+                        Type = TcpMessageType.PlayerNumber,
+                        PlayerNumber = server.PlayerCount
+                    }));
+                    break;
+
+                default:
+                    Console.WriteLine($"Received a message with an invalid type");
+                    break;
+            }
         }
 
         protected override void OnError(SocketError error)

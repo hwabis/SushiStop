@@ -1,5 +1,4 @@
 using System.Net;
-using NetCoreServer;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -8,6 +7,7 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osuTK.Graphics;
+using SushiStop.Game.Networking;
 
 namespace SushiStop.Game.Screens
 {
@@ -88,13 +88,13 @@ namespace SushiStop.Game.Screens
                 Logger.Log("Invalid IP and/or port!");
                 return;
             }
-            TcpClient client = new TcpClient(address, port);
+            SushiStopClient client = new SushiStopClient(address, port, screenStack);
 
-            // Using Connect() freezes the whole game up, but I can't figure out
-            // how to work with ConnectAsync()... :(
+            // Using Connect() freezes the whole game up,
+            // but I can't figure out how to work with ConnectAsync()... :(
             bool connectionSucceeded = client.Connect();
             if (connectionSucceeded)
-                screenStack.Push(new LobbyScreen());
+                screenStack.Push(new LobbyScreen(client));
             else
                 Logger.Log("Failed to connect!");
         }
