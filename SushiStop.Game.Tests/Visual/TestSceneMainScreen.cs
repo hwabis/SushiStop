@@ -12,7 +12,7 @@ namespace SushiStop.Game.Tests.Visual
 
         public TestSceneMainScreen()
         {
-            Add(new ScreenStack(new MainScreen()) { RelativeSizeAxes = Axes.Both });
+            Add(new ScreenStack(new HomeScreen()) { RelativeSizeAxes = Axes.Both });
         }
     }
 }
