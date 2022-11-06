@@ -50,7 +50,7 @@ namespace SushiStop.Server
                     }
 
                     Console.WriteLine("Sending player number: " + server.PlayerCount);
-                    SendAsync(JsonConvert.SerializeObject(new TcpMessage
+                    Send(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.PlayerNumber,
                         PlayerNumber = server.PlayerCount
