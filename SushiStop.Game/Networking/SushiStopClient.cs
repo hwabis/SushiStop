@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
+using System.Net.Sockets;
 using System.Text;
-using NetCoreServer;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
 using SushiStop.Game.Screens;
 using Logger = osu.Framework.Logging.Logger;
+using TcpClient = NetCoreServer.TcpClient;
 
 namespace SushiStop.Game.Networking
 {
@@ -49,6 +49,11 @@ namespace SushiStop.Game.Networking
         {
             while (screenStack.CurrentScreen is not HomeScreen)
                 screenStack.Exit();
+        }
+
+        protected override void OnError(SocketError error)
+        {
+            Logger.Log($"TCP client caught an error with code {error}");
         }
     }
 }

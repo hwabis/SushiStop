@@ -90,9 +90,8 @@ namespace SushiStop.Game.Screens
             }
             SushiStopClient client = new SushiStopClient(address, port, screenStack);
 
-            // Using Connect() freezes the whole game up,
-            // but I can't figure out how to work with ConnectAsync()... :(
-            bool connectionSucceeded = client.Connect();
+            // No idea if this bool is ever going to be false
+            bool connectionSucceeded = client.ConnectAsync();
             if (connectionSucceeded)
                 screenStack.Push(new LobbyScreen(client));
             else

@@ -49,7 +49,7 @@ namespace SushiStop.Server
                         break;
                     }
 
-                    Console.WriteLine("Sending plyaer number: " + server.PlayerCount);
+                    Console.WriteLine("Sending player number: " + server.PlayerCount);
                     SendAsync(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.PlayerNumber,
