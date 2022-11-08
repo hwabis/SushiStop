@@ -17,6 +17,11 @@
         // Client is requesting their player number
         PlayerNumberRequest,
         // Server is giving the client their player number
-        PlayerNumber
+        PlayerNumber,
+
+        // Client is requesting to start
+        StartGameRequest,
+        // Server tells everyone to go to play screen
+        StartGame
     }
 }

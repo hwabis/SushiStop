@@ -31,9 +31,18 @@ namespace SushiStop.Game.Networking
             switch (message.Type)
             {
                 case TcpMessageType.PlayerNumber:
+                {
                     if (screenStack.CurrentScreen is LobbyScreen lobbyScreen)
                         lobbyScreen.PlayerNumberBindable.Value = message.PlayerNumber;
                     break;
+                }
+
+                case TcpMessageType.StartGame:
+                {
+                    if (screenStack.CurrentScreen is LobbyScreen lobbyScreen)
+                        lobbyScreen.GoToPlayScreenNextUpdateLoop = true;
+                    break;
+                }
 
                 default:
                     Logger.Log($"Received a message with an invalid type");

@@ -57,6 +57,17 @@ namespace SushiStop.Server
                     }));
                     break;
 
+                case TcpMessageType.StartGameRequest:
+                    if (server.PlayerCount <= 1)
+                        return;
+
+                    Console.WriteLine("Server starting game!");
+                    server.Multicast(JsonConvert.SerializeObject(new TcpMessage
+                    {
+                        Type = TcpMessageType.StartGame
+                    }));
+                    break;
+
                 default:
                     Console.WriteLine($"Received a message with an invalid type");
                     break;
