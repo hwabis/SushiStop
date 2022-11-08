@@ -76,6 +76,8 @@ namespace SushiStop.Game.Screens
 
         private void connectToServer()
         {
+            // Use 127.0.0.1 for testing
+            // TODO: check if you're connecting to an address/port that isn't being listened...?
             IPAddress address;
             int port;
             try

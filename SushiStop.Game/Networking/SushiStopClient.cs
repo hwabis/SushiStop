@@ -31,10 +31,8 @@ namespace SushiStop.Game.Networking
             switch (message.Type)
             {
                 case TcpMessageType.PlayerNumber:
-                    if (screenStack.CurrentScreen is LobbyScreen screen)
-                    {
-                        screen.PlayerNumberText.Text += message.PlayerNumber.ToString();
-                    }
+                    if (screenStack.CurrentScreen is LobbyScreen lobbyScreen)
+                        lobbyScreen.PlayerNumberBindable.Value = message.PlayerNumber;
                     break;
 
                 default:

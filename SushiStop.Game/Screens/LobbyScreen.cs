@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Screens;
@@ -9,7 +10,8 @@ namespace SushiStop.Game.Screens
 {
     public class LobbyScreen : Screen
     {
-        public SpriteText PlayerNumberText;
+        public readonly Bindable<int> PlayerNumberBindable = new Bindable<int>();
+        private SpriteText playerNumberText;
 
         private SushiStopClient client;
         private ScreenStack screenStack;
@@ -24,7 +26,7 @@ namespace SushiStop.Game.Screens
         {
             InternalChildren = new Drawable[]
             {
-                PlayerNumberText = new SpriteText
+                playerNumberText = new SpriteText
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
@@ -46,6 +48,8 @@ namespace SushiStop.Game.Screens
             {
                 Type = TcpMessageType.PlayerNumberRequest
             }));
+
+            PlayerNumberBindable.ValueChanged += val => playerNumberText.Text = $"You are player: {val.NewValue}";
         }
     }
 }
