@@ -26,9 +26,7 @@ namespace SushiStop.Game.Networking
 
             TcpMessage message = JsonConvert.DeserializeObject<TcpMessage>(messageString);
             if (message == null)
-            {
                 return;
-            }
 
             switch (message.Type)
             {

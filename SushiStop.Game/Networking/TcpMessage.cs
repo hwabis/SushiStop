@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// The client and the server communicate by sending a JSON serialized string of
-    /// an instance of this class TcpMessage.
+    /// an instance of this class and checks TcpMessage.Type on both ends
     /// </summary>
     public class TcpMessage
     {
@@ -14,9 +14,9 @@
 
     public enum TcpMessageType
     {
-        // Client requests their player number when joining lobby
+        // Client is requesting their player number
         PlayerNumberRequest,
-        // Server gives the client their player number
+        // Server is giving the client their player number
         PlayerNumber
     }
 }
