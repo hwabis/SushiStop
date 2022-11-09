@@ -1,8 +1,8 @@
+using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
-using NUnit.Framework;
-using SushiStop.Game.Screens;
 using osu.Framework.Allocation;
+using SushiStop.Game.Screens;
 
 namespace SushiStop.Game.Tests.Visual
 {

@@ -4,7 +4,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osuTK.Graphics;
 
-namespace SushiStop.Game.Elements
+namespace SushiStop.Game.Cards.Drawables
 {
     public class CardBackground : Container
     {

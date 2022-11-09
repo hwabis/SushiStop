@@ -1,6 +1,6 @@
+using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Platform;
-using NUnit.Framework;
 
 namespace SushiStop.Game.Tests.Visual
 {

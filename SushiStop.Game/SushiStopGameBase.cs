@@ -1,6 +1,7 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osuTK;
 using SushiStop.Resources;
@@ -14,6 +15,11 @@ namespace SushiStop.Game
         // the screen scaling for all components including the test browser and framework overlays.
 
         protected override Container<Drawable> Content { get; }
+
+        protected override TextureFilteringMode DefaultTextureFilteringMode
+            // To preserve the 8-bit aesthetic, disable texture filtering
+            // so they won't become blurry when upscaled
+            => TextureFilteringMode.Nearest;
 
         protected SushiStopGameBase()
         {
