@@ -1,5 +1,6 @@
 using osu.Framework.Graphics;
 using NUnit.Framework;
+using SushiStop.Game.Elements;
 
 namespace SushiStop.Game.Tests.Visual
 {

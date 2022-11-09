@@ -1,18 +1,24 @@
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
 using NUnit.Framework;
+using SushiStop.Game.Screens;
+using osu.Framework.Allocation;
 
 namespace SushiStop.Game.Tests.Visual
 {
     [TestFixture]
-    public class TestSceneMainScreen : SushiStopTestScene
+    public class TestSceneHomeScreen : SushiStopTestScene
     {
         // Add visual tests to ensure correct behaviour of your game: https://github.com/ppy/osu-framework/wiki/Development-and-Testing
         // You can make changes to classes associated with the tests and they will recompile and update immediately.
 
-        public TestSceneMainScreen()
+        [Cached]
+        private ScreenStack screenStack = new ScreenStack { RelativeSizeAxes = Axes.Both };
+
+        public TestSceneHomeScreen()
         {
-            Add(new ScreenStack(new HomeScreen()) { RelativeSizeAxes = Axes.Both });
+            screenStack.Push(new HomeScreen());
+            Add(screenStack);
         }
     }
 }

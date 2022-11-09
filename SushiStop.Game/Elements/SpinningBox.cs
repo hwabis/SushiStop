@@ -5,7 +5,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
-namespace SushiStop.Game
+namespace SushiStop.Game.Elements
 {
     public class SpinningBox : CompositeDrawable
     {
