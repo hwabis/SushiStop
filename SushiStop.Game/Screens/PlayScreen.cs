@@ -34,8 +34,8 @@ namespace SushiStop.Game.Screens
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
                     AutoSizeAxes = Axes.Both,
-                    Spacing = new Vector2(92, 0),
-                    Y = -5
+                    Spacing = new Vector2(94, 0),
+                    Y = -70
                 }
             };
         }
@@ -44,7 +44,8 @@ namespace SushiStop.Game.Screens
         {
             base.LoadComplete();
 
-            client.SendAsync(JsonConvert.SerializeObject(new TcpMessage
+            // Client may be null when we passed it as null in the constructor (FOR TEST SCENE PURPOSES ONLY)
+            client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
             {
                 Type = TcpMessageType.StartRoundRequest
             }));
@@ -53,7 +54,9 @@ namespace SushiStop.Game.Screens
         public void CreateDrawableHand()
         {
             foreach (Card card in Hand)
+            {
                 Schedule(() => drawableHand.Add(card.CreateDrawableCard()));
+            }
         }
     }
 }
