@@ -5,6 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
 using SushiStop.Game.Cards;
+using SushiStop.Game.Cards.Drawables;
 using SushiStop.Game.Screens;
 using Logger = osu.Framework.Logging.Logger;
 using TcpClient = NetCoreServer.TcpClient;
@@ -52,6 +53,10 @@ namespace SushiStop.Game.Networking
                     {
                         Logger.Log($"Received hand with {message.StartingHand.Count} cards");
                         playScreen.Hand = message.StartingHand;
+                        foreach (Card card in playScreen.Hand)
+                        {
+                            // playScreen.DrawableCards.Add(card.CreateDrawableCard());
+                        }
                     }
                     break;
                 }
