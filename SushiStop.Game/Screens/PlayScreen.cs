@@ -55,7 +55,9 @@ namespace SushiStop.Game.Screens
         {
             foreach (Card card in Hand)
             {
-                Schedule(() => drawableHand.Add(card.CreateDrawableCard()));
+                // TODO: REMOVE
+                if (card.CreateDrawableCard() != null)
+                    Schedule(() => drawableHand.Add(card.CreateDrawableCard()));
             }
         }
     }

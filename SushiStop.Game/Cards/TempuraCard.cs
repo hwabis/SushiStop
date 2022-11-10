@@ -5,6 +5,6 @@ namespace SushiStop.Game.Cards
 {
     public class TempuraCard : Card
     {
-        public override CompositeDrawable CreateDrawableCard() => new DrawableTempura(this);
+        public override CompositeDrawable CreateDrawableCard() => new DrawableTempuraCard(this);
     }
 }

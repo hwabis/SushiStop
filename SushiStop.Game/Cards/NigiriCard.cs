@@ -13,6 +13,6 @@ namespace SushiStop.Game.Cards
             Value = count;
         }
 
-        public override CompositeDrawable CreateDrawableCard() => new DrawableTempura(this);
+        public override CompositeDrawable CreateDrawableCard() => new DrawableNigiriCard(this, Value);
     }
 }

@@ -22,11 +22,11 @@ namespace SushiStop.Game.Tests.Visual
                 Children = new Drawable[]
                 {
                     // Why the gap ??
-                    new DrawableTempura(new TempuraCard()),
-                    new DrawableTempura(new TempuraCard()),
+                    new DrawableTempuraCard(new TempuraCard()),
+                    new DrawableTempuraCard(new TempuraCard()),
                     new CardBackground(Color4.DarkRed),
-                    new DrawableTempura(new TempuraCard()),
-                    new DrawableTempura(new TempuraCard()),
+                    new DrawableTempuraCard(new TempuraCard()),
+                    new DrawableTempuraCard(new TempuraCard()),
                 }
             });
         }
