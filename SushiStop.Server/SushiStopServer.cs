@@ -1,12 +1,14 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using NetCoreServer;
+using SushiStop.Game.Cards;
 
 namespace SushiStop.Server
 {
     public class SushiStopServer : TcpServer
     {
         public int PlayerCount = 0;
+        public CardDeck Deck = new CardDeck();
 
         public SushiStopServer(IPAddress address, int port)
             : base(address, port)

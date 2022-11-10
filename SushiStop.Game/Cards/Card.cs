@@ -4,7 +4,7 @@
     {
         Tempura,
         Sashimi,
-        Dumplings,
+        Dumpling,
         MakiRoll1,
         MakiRoll2,
         MakiRoll3,

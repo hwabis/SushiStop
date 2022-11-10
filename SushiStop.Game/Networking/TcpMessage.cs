@@ -1,4 +1,7 @@
-﻿namespace SushiStop.Game.Networking
+﻿using System.Collections.Generic;
+using SushiStop.Game.Cards;
+
+namespace SushiStop.Game.Networking
 {
     /// <summary>
     /// The client and the server communicate by sending a JSON serialized string of
@@ -10,6 +13,9 @@
 
         // TcpMessageType.PlayerNumber sets this
         public int PlayerNumber;
+
+        // TcpMessageType.StartRound sets this
+        public List<Card> StartingHand;
     }
 
     public enum TcpMessageType
@@ -22,6 +28,11 @@
         // Client is requesting to start
         StartGameRequest,
         // Server tells everyone to go to play screen
-        StartGame
+        StartGame,
+
+        // Three rounds per game
+        StartRoundRequest,
+        // Distribute starting hand to everyone
+        StartRound,
     }
 }

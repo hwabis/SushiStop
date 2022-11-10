@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
+using SushiStop.Game.Cards;
 using SushiStop.Game.Screens;
 using Logger = osu.Framework.Logging.Logger;
 using TcpClient = NetCoreServer.TcpClient;
@@ -41,6 +43,16 @@ namespace SushiStop.Game.Networking
                 {
                     if (screenStack.CurrentScreen is LobbyScreen lobbyScreen)
                         lobbyScreen.GoToPlayScreenNextUpdateLoop = true;
+                    break;
+                }
+
+                case TcpMessageType.StartRound:
+                {
+                    if (screenStack.CurrentScreen is PlayScreen playScreen)
+                    {
+                        Logger.Log($"Received hand with {message.StartingHand.Count} cards");
+                        playScreen.Hand = message.StartingHand;
+                    }
                     break;
                 }
 

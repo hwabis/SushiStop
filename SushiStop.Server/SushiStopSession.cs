@@ -2,6 +2,7 @@
 using System.Text;
 using NetCoreServer;
 using Newtonsoft.Json;
+using SushiStop.Game.Cards;
 using SushiStop.Game.Networking;
 
 namespace SushiStop.Server
@@ -65,6 +66,42 @@ namespace SushiStop.Server
                     server.Multicast(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.StartGame
+                    }));
+                    break;
+
+                case TcpMessageType.StartRoundRequest:
+                    server.Deck.ResetDeck();
+
+                    int numberOfStartingCards;
+                    switch (server.PlayerCount)
+                    {
+                        case 2:
+                            numberOfStartingCards = 10;
+                            break;
+                        case 3:
+                            numberOfStartingCards = 9;
+                            break;
+                        case 4:
+                            numberOfStartingCards = 8;
+                            break;
+                        case 5:
+                            numberOfStartingCards = 7;
+                            break;
+                        default:
+                            Console.WriteLine($"Started a round with invalid number of players");
+                            return;
+                    }
+
+                    // TODO: check that this is synchronized..? Every client is gonna be doing this at the same time
+                    List<Card> startingHand = new List<Card>();
+                    for (int i = 0; i < numberOfStartingCards; i++)
+                        startingHand.Add(server.Deck.DrawRandomCard());
+
+                    Console.WriteLine($"Sending starting hand of {numberOfStartingCards} cards");
+                    Send(JsonConvert.SerializeObject(new TcpMessage
+                    {
+                        Type = TcpMessageType.StartRound,
+                        StartingHand = startingHand
                     }));
                     break;
 

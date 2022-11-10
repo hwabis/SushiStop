@@ -81,7 +81,7 @@ namespace SushiStop.Game.Screens
             base.Update();
 
             if (GoToPlayScreenNextUpdateLoop)
-                screenStack.Push(new PlayScreen());
+                screenStack.Push(new PlayScreen(client));
         }
 
         private void startGame()
