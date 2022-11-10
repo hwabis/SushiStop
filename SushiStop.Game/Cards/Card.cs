@@ -1,18 +1,9 @@
-﻿namespace SushiStop.Game.Cards
+﻿using osu.Framework.Graphics.Containers;
+
+namespace SushiStop.Game.Cards
 {
-    public enum Card
+    public abstract class Card
     {
-        Tempura,
-        Sashimi,
-        Dumpling,
-        MakiRoll1,
-        MakiRoll2,
-        MakiRoll3,
-        Wasabi,
-        EggNigiri,
-        SalmonNigiri,
-        SquidNigiri,
-        Pudding,
-        Chopsticks
+        public abstract CompositeDrawable CreateDrawableCard();
     }
 }

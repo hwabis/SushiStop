@@ -27,7 +27,8 @@ namespace SushiStop.Game.Networking
             string messageString = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
             Logger.Log("Incoming: " + messageString);
 
-            TcpMessage message = JsonConvert.DeserializeObject<TcpMessage>(messageString);
+            TcpMessage message = JsonConvert.DeserializeObject<TcpMessage>(messageString,
+                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             if (message == null)
                 return;
 
@@ -43,7 +44,7 @@ namespace SushiStop.Game.Networking
                 case TcpMessageType.StartGame:
                 {
                     if (screenStack.CurrentScreen is LobbyScreen lobbyScreen)
-                        lobbyScreen.GoToPlayScreenNextUpdateLoop = true;
+                        lobbyScreen.GoToPlayScreen();
                     break;
                 }
 
@@ -53,10 +54,7 @@ namespace SushiStop.Game.Networking
                     {
                         Logger.Log($"Received hand with {message.StartingHand.Count} cards");
                         playScreen.Hand = message.StartingHand;
-                        foreach (Card card in playScreen.Hand)
-                        {
-                            // playScreen.DrawableCards.Add(card.CreateDrawableCard());
-                        }
+                        playScreen.CreateDrawableHand();
                     }
                     break;
                 }

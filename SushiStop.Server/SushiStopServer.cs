@@ -1,7 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 using NetCoreServer;
-using SushiStop.Game.Cards;
 
 namespace SushiStop.Server
 {

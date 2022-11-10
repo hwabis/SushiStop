@@ -9,14 +9,16 @@ namespace SushiStop.Game.Cards.Drawables
 {
     public class DrawableTempura : CompositeDrawable, IDrawableCard
     {
-        public Card Card => Card.Tempura;
+        public Card Card { get; set; }
 
         private Container cardContainer;
         private Sprite sprite;
 
-        public DrawableTempura()
+        public DrawableTempura(Card card)
         {
             Origin = Anchor.Centre;
+
+            Card = card;
         }
 
         [BackgroundDependencyLoader]

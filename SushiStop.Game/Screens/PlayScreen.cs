@@ -15,9 +15,7 @@ namespace SushiStop.Game.Screens
         // Player-related info
         public List<Card> Hand { get; set; }
 
-        // Drawable containers
-        // Each child in DrawableCards should implement IDrawableCard
-        public FillFlowContainer DrawableCards { get; set; }
+        private FillFlowContainer drawableHand { get; set; }
 
         private SushiStopClient client;
 
@@ -31,10 +29,11 @@ namespace SushiStop.Game.Screens
         {
             InternalChildren = new Drawable[]
             {
-                DrawableCards = new FillFlowContainer
+                drawableHand = new FillFlowContainer
                 {
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
+                    AutoSizeAxes = Axes.Both,
                     Spacing = new Vector2(92, 0),
                     Y = -5
                 }
@@ -49,6 +48,12 @@ namespace SushiStop.Game.Screens
             {
                 Type = TcpMessageType.StartRoundRequest
             }));
+        }
+
+        public void CreateDrawableHand()
+        {
+            foreach (Card card in Hand)
+                Schedule(() => drawableHand.Add(card.CreateDrawableCard()));
         }
     }
 }

@@ -3,6 +3,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osuTK;
 using osuTK.Graphics;
+using SushiStop.Game.Cards;
 using SushiStop.Game.Cards.Drawables;
 
 namespace SushiStop.Game.Tests.Visual
@@ -21,11 +22,11 @@ namespace SushiStop.Game.Tests.Visual
                 Children = new Drawable[]
                 {
                     // Why the gap ??
-                    new DrawableTempura(),
-                    new DrawableTempura(),
+                    new DrawableTempura(new TempuraCard()),
+                    new DrawableTempura(new TempuraCard()),
                     new CardBackground(Color4.DarkRed),
-                    new DrawableTempura(),
-                    new DrawableTempura(),
+                    new DrawableTempura(new TempuraCard()),
+                    new DrawableTempura(new TempuraCard()),
                 }
             });
         }

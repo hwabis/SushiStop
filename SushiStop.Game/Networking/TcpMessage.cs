@@ -11,10 +11,10 @@ namespace SushiStop.Game.Networking
     {
         public TcpMessageType Type;
 
-        // TcpMessageType.PlayerNumber sets this
+        // Server TcpMessageType.PlayerNumber sets this
         public int PlayerNumber;
 
-        // TcpMessageType.StartRound sets this
+        // Server TcpMessageType.StartRound sets this
         public List<Card> StartingHand;
     }
 

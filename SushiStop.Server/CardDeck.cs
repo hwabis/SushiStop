@@ -22,29 +22,29 @@ namespace SushiStop.Server
         public void ResetDeck()
         {
             for (int i = 0; i < 14; i++)
-                deck.Add(Card.Tempura);
+                deck.Add(new TempuraCard());
             for (int i = 0; i < 14; i++)
-                deck.Add(Card.Sashimi);
+                deck.Add(new SashimiCard());
             for (int i = 0; i < 14; i++)
-                deck.Add(Card.Dumpling);
+                deck.Add(new DumplingCard());
             for (int i = 0; i < 12; i++)
-                deck.Add(Card.MakiRoll2);
+                deck.Add(new MakiRollCard(2));
             for (int i = 0; i < 8; i++)
-                deck.Add(Card.MakiRoll3);
+                deck.Add(new MakiRollCard(3));
             for (int i = 0; i < 6; i++)
-                deck.Add(Card.MakiRoll1);
+                deck.Add(new MakiRollCard(1));
             for (int i = 0; i < 10; i++)
-                deck.Add(Card.SalmonNigiri);
+                deck.Add(new NigiriCard(2));
             for (int i = 0; i < 5; i++)
-                deck.Add(Card.SquidNigiri);
+                deck.Add(new NigiriCard(3));
             for (int i = 0; i < 5; i++)
-                deck.Add(Card.EggNigiri);
+                deck.Add(new NigiriCard(1));
             for (int i = 0; i < 10; i++)
-                deck.Add(Card.Pudding);
+                deck.Add(new PuddingCard());
             for (int i = 0; i < 6; i++)
-                deck.Add(Card.Wasabi);
+                deck.Add(new WasabiCard());
             for (int i = 0; i < 4; i++)
-                deck.Add(Card.Chopsticks);
+                deck.Add(new ChopsticksCard());
         }
     }
 }

@@ -16,8 +16,6 @@ namespace SushiStop.Game.Screens
         public readonly Bindable<int> PlayerNumberBindable = new Bindable<int>();
         private SpriteText playerNumberText;
 
-        public bool GoToPlayScreenNextUpdateLoop = false;
-
         private SushiStopClient client;
         private ScreenStack screenStack;
 
@@ -54,7 +52,7 @@ namespace SushiStop.Game.Screens
                             Width = 100,
                             Height = 50,
                             BackgroundColour = Color4.DarkBlue,
-                            Action = startGame,
+                            Action = requeststartGame,
                             Margin = new MarginPadding(5)
                         }
                     }
@@ -76,15 +74,12 @@ namespace SushiStop.Game.Screens
             PlayerNumberBindable.ValueChanged += val => playerNumberText.Text = $"You are player: {val.NewValue}";
         }
 
-        protected override void Update()
+        public void GoToPlayScreen()
         {
-            base.Update();
-
-            if (GoToPlayScreenNextUpdateLoop)
-                screenStack.Push(new PlayScreen(client));
+            Schedule(() => screenStack.Push(new PlayScreen(client)));
         }
 
-        private void startGame()
+        private void requeststartGame()
         {
             // TODO: handle that 0.1 second when a player is in the lobby but
             // doesn't have a player number yet. just wait for everyone to have a number :)
