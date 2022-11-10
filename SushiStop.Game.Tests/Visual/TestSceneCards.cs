@@ -17,11 +17,15 @@ namespace SushiStop.Game.Tests.Visual
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 AutoSizeAxes = Axes.Both,
-                Spacing = new Vector2(46, 0),
+                Spacing = new Vector2(92, 0),
                 Children = new Drawable[]
                 {
+                    // Why the gap ??
+                    new DrawableTempura(),
+                    new DrawableTempura(),
                     new CardBackground(Color4.DarkRed),
-                    new DrawableTempura()
+                    new DrawableTempura(),
+                    new DrawableTempura(),
                 }
             });
         }

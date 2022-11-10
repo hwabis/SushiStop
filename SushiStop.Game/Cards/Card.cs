@@ -2,17 +2,17 @@
 {
     public enum Card
     {
-        Wasabi,
-        Chopsticks,
-        MakiRoll1,
-        MakiRoll2,
-        MakiRoll3,
         Tempura,
         Sashimi,
         Dumplings,
-        SquidNigiri,
-        SalmonNigiri,
+        MakiRoll1,
+        MakiRoll2,
+        MakiRoll3,
+        Wasabi,
         EggNigiri,
-        Pudding
+        SalmonNigiri,
+        SquidNigiri,
+        Pudding,
+        Chopsticks
     }
 }

@@ -11,8 +11,8 @@ namespace SushiStop.Game.Cards.Drawables
         private Box background;
         private Color4 color;
 
-        private const int height = 128;
-        private const int width = 91;
+        private const int height = 136;
+        private const int width = 92;
 
         public CardBackground(Color4 color)
         {
