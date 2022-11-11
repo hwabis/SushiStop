@@ -28,7 +28,7 @@ namespace SushiStop.Game.Networking
         // Server is giving the client their player number
         PlayerNumber,
 
-        // Client is requesting to start
+        // Client is requesting to start game (round 1)
         StartGameRequest,
         // Server tells everyone to go to play screen
         StartGame,

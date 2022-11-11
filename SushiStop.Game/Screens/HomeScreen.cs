@@ -92,12 +92,14 @@ namespace SushiStop.Game.Screens
             }
             SushiStopClient client = new SushiStopClient(address, port, screenStack);
 
-            // No idea if this bool is ever going to be false
-            bool connectionSucceeded = client.ConnectAsync();
-            if (connectionSucceeded)
+            // TODO: not sure why this isn't awaitable.
+            // I need to await this so that we don't accidentally connect after we've already
+            // send a PlayerNumberRequest, but I can't. So, this is a (terrible) solution for now.
+            client.ConnectAsync();
+            Scheduler.AddDelayed(() =>
+            {
                 screenStack.Push(new LobbyScreen(client));
-            else
-                Logger.Log("Failed to connect!");
+            }, 1000);
         }
     }
 }
