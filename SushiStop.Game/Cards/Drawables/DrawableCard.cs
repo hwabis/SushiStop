@@ -1,4 +1,5 @@
-﻿using osu.Framework.Graphics;
+﻿using System;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
@@ -11,12 +12,16 @@ namespace SushiStop.Game.Cards.Drawables
     {
         public Card Card { get; protected set; }
 
+        private Container cardContainer;
+
         private Color4 backgroundColor;
         private string textureName;
         private string descriptionText;
         private int cornerSpriteCount;
+        // onClick may be null
+        private Action onClick;
 
-        public DrawableCard(Card card, Color4 backgroundColor, string textureName, string descriptionText, int cornerSpriteCount)
+        public DrawableCard(Card card, Action onClick, Color4 backgroundColor, string textureName, string descriptionText, int cornerSpriteCount)
         {
             Origin = Anchor.Centre;
             Card = card;
@@ -25,6 +30,7 @@ namespace SushiStop.Game.Cards.Drawables
             this.textureName = textureName;
             this.descriptionText = descriptionText;
             this.cornerSpriteCount = cornerSpriteCount;
+            this.onClick = onClick;
         }
 
         /// <summary>
@@ -34,7 +40,6 @@ namespace SushiStop.Game.Cards.Drawables
         /// <param name="textures">From your [BackgroundDependencyLoader] method parameter</param>
         protected void OnLoad(TextureStore textures)
         {
-            Container cardContainer;
             InternalChild = cardContainer = new CardBackground(backgroundColor);
 
             Sprite centerSprite = new Sprite
@@ -90,6 +95,20 @@ namespace SushiStop.Game.Cards.Drawables
                     }
                 }
             });
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            if (onClick != null)
+            {
+                cardContainer.Add(new ClickableContainer
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Action = onClick
+                });
+            }
         }
     }
 }

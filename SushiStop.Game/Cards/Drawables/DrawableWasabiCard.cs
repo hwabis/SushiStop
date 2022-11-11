@@ -1,4 +1,5 @@
-﻿using osu.Framework.Allocation;
+﻿using System;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics.Textures;
 using osuTK.Graphics;
 
@@ -6,8 +7,8 @@ namespace SushiStop.Game.Cards.Drawables
 {
     public class DrawableWasabiCard : DrawableCard
     {
-        public DrawableWasabiCard(WasabiCard card)
-            : base(card, Color4.Gold, "wasabi", "x3 next stick", 1)
+        public DrawableWasabiCard(WasabiCard card, Action onClick = null)
+            : base(card, onClick, Color4.Gold, "wasabi", "x3 next stick", 1)
         {
         }
 

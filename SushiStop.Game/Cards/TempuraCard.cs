@@ -1,9 +1,11 @@
-﻿using SushiStop.Game.Cards.Drawables;
+﻿using System;
+using SushiStop.Game.Cards.Drawables;
 
 namespace SushiStop.Game.Cards
 {
     public class TempuraCard : Card
     {
-        public override DrawableCard CreateDrawableCard() => new DrawableTempuraCard(this);
+        public override DrawableCard CreateDrawableCard(Action onClick = null) =>
+            new DrawableTempuraCard(this, onClick);
     }
 }
