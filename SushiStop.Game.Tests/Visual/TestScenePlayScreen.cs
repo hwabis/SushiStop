@@ -17,7 +17,7 @@ namespace SushiStop.Game.Tests.Visual
 
         public TestScenePlayScreen()
         {
-            screenStack.Push(playScreen = new PlayScreen(null));
+            screenStack.Push(playScreen = new PlayScreen(null, 1));
             Add(screenStack);
 
             playScreen.Hand = new List<Card>()

@@ -76,7 +76,7 @@ namespace SushiStop.Game.Screens
 
         public void GoToPlayScreen()
         {
-            Schedule(() => screenStack.Push(new PlayScreen(client)));
+            Schedule(() => screenStack.Push(new PlayScreen(client, PlayerNumberBindable.Value)));
         }
 
         private void requeststartGame()

@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Screens;
 using osuTK;
 using SushiStop.Game.Cards;
+using SushiStop.Game.Cards.Drawables;
 using SushiStop.Game.Networking;
 
 namespace SushiStop.Game.Screens
@@ -14,14 +15,16 @@ namespace SushiStop.Game.Screens
     {
         // Player-related info
         public List<Card> Hand { get; set; }
+        private int playerNumber;
 
-        private FillFlowContainer drawableHand { get; set; }
+        private FillFlowContainer<DrawableCard> drawableHand;
 
         private SushiStopClient client;
 
-        public PlayScreen(SushiStopClient client)
+        public PlayScreen(SushiStopClient client, int playerNumber)
         {
             this.client = client;
+            this.playerNumber = playerNumber;
         }
 
         [BackgroundDependencyLoader]
@@ -29,7 +32,7 @@ namespace SushiStop.Game.Screens
         {
             InternalChildren = new Drawable[]
             {
-                drawableHand = new FillFlowContainer
+                drawableHand = new FillFlowContainer<DrawableCard>
                 {
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
@@ -44,6 +47,8 @@ namespace SushiStop.Game.Screens
         {
             base.LoadComplete();
 
+            // TODO: Highlight our player's row
+
             // Client may be null when we passed it as null in the constructor (FOR TEST SCENE PURPOSES ONLY)
             client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
             {
@@ -54,9 +59,7 @@ namespace SushiStop.Game.Screens
         public void CreateDrawableHand()
         {
             foreach (Card card in Hand)
-            {
                 Schedule(() => drawableHand.Add(card.CreateDrawableCard()));
-            }
         }
     }
 }

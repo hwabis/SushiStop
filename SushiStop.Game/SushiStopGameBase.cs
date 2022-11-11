@@ -16,11 +16,6 @@ namespace SushiStop.Game
 
         protected override Container<Drawable> Content { get; }
 
-        protected override TextureFilteringMode DefaultTextureFilteringMode
-            // To preserve the 8-bit aesthetic, disable texture filtering
-            // so they won't become blurry when upscaled
-            => TextureFilteringMode.Nearest;
-
         protected SushiStopGameBase()
         {
             // Ensure game and tests scale with window size and screen DPI.
