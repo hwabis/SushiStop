@@ -26,6 +26,8 @@ namespace SushiStop.Server
         {
             Console.WriteLine($"TCP session with Id {Id} disconnected!");
             server.PlayerCount--;
+
+            // TODO: broadcast disconnect
         }
 
         protected override void OnReceived(byte[] buffer, long offset, long size)

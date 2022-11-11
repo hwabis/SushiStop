@@ -1,4 +1,5 @@
-﻿using SushiStop.Game.Cards.Drawables;
+﻿using System;
+using SushiStop.Game.Cards.Drawables;
 
 namespace SushiStop.Game.Cards
 {
@@ -9,6 +10,9 @@ namespace SushiStop.Game.Cards
 
         public MakiRollCard(int count)
         {
+            if (count > 3 || count < 1)
+                throw new ArgumentOutOfRangeException("Count must be between 1 and 3.");
+
             Count = count;
         }
 

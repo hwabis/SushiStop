@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
-using SushiStop.Game.Cards;
-using SushiStop.Game.Cards.Drawables;
 using SushiStop.Game.Screens;
 using Logger = osu.Framework.Logging.Logger;
 using TcpClient = NetCoreServer.TcpClient;

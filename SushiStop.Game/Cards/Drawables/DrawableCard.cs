@@ -4,7 +4,6 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osuTK.Graphics;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SushiStop.Game.Cards.Drawables
 {
