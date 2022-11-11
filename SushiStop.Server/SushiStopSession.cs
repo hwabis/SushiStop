@@ -38,7 +38,8 @@ namespace SushiStop.Server
             string messageString = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
             Console.WriteLine("Incoming: " + messageString);
 
-            TcpMessage? message = JsonConvert.DeserializeObject<TcpMessage>(messageString);
+            TcpMessage? message = JsonConvert.DeserializeObject<TcpMessage>(messageString,
+                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             if (message == null)
             {
                 Console.WriteLine($"Received a message that failed to be deserialized");
@@ -119,6 +120,10 @@ namespace SushiStop.Server
                         Type = TcpMessageType.StartRound,
                         Hand = startingHand
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
+                    break;
+
+                case TcpMessageType.PlayedCard:
+                    // TODO
                     break;
 
                 default:

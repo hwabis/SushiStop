@@ -66,7 +66,7 @@ namespace SushiStop.Game.Screens
                     {
                         Type = TcpMessageType.PlayedCard,
                         PlayedCard = card
-                    }));
+                    }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
                 })));
             }
         }
