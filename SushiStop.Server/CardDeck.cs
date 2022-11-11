@@ -9,7 +9,7 @@ namespace SushiStop.Server
 
         public CardDeck()
         {
-            ResetDeck();
+            Reset();
         }
 
         public Card DrawRandomCard()
@@ -19,7 +19,7 @@ namespace SushiStop.Server
             return topCard;
         }
 
-        public void ResetDeck()
+        public void Reset()
         {
             for (int i = 0; i < 14; i++)
                 deck.Add(new TempuraCard());

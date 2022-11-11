@@ -1,12 +1,13 @@
-﻿using System.Net.Sockets;
-using System.Net;
+﻿using System.Net;
+using System.Net.Sockets;
 using NetCoreServer;
 
 namespace SushiStop.Server
 {
     public class SushiStopServer : TcpServer
     {
-        public int PlayerCount = 0;
+        // Player 1 is the Players[0], ...
+        public List<Player> Players = new List<Player>();
         public CardDeck Deck = new CardDeck();
 
         public SushiStopServer(IPAddress address, int port)
@@ -22,6 +23,16 @@ namespace SushiStop.Server
         protected override void OnError(SocketError error)
         {
             Console.WriteLine($"Server caught an error with code {error}");
+        }
+
+        public void ResetForNewRound()
+        {
+            foreach (Player player in Players)
+            {
+                player.Hand.Clear(); // Hand should already be clear but let's make sure
+                player.PlayedCards.Clear();
+            }
+            Deck.Reset();
         }
     }
 }

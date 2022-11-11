@@ -15,7 +15,7 @@ namespace SushiStop.Game.Networking
         public int PlayerNumber;
 
         // Server TcpMessageType.StartRound sets this
-        public List<Card> StartingHand;
+        public List<Card> Hand;
     }
 
     public enum TcpMessageType

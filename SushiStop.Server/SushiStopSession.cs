@@ -1,5 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using Commons.Music.Midi;
 using NetCoreServer;
 using Newtonsoft.Json;
 using SushiStop.Game.Cards;
@@ -9,6 +10,8 @@ namespace SushiStop.Server
 {
     public class SushiStopSession : TcpSession
     {
+        private Player player = new Player();
+
         private SushiStopServer server;
 
         public SushiStopSession(SushiStopServer server) : base(server)
@@ -19,15 +22,16 @@ namespace SushiStop.Server
         protected override void OnConnected()
         {
             Console.WriteLine($"TCP session with Id {Id} connected!");
-            server.PlayerCount++;
+            player = new Player(Id);
+            server.Players.Add(player);
         }
 
         protected override void OnDisconnected()
         {
             Console.WriteLine($"TCP session with Id {Id} disconnected!");
-            server.PlayerCount--;
+            server.Players.Remove(player);
 
-            // TODO: broadcast disconnect
+            // TODO: broadcast disconnect?
         }
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
@@ -45,7 +49,7 @@ namespace SushiStop.Server
             switch (message.Type)
             {
                 case TcpMessageType.PlayerNumberRequest:
-                    if (server.PlayerCount > 5)
+                    if (server.Players.Count > 5)
                     {
                         // We're already at the max player limit
                         // TODO: all this lobby stuff and player tracking stuff is messed up when a player disconnects.
@@ -54,16 +58,16 @@ namespace SushiStop.Server
                         break;
                     }
 
-                    Console.WriteLine("Sending player number: " + server.PlayerCount);
+                    Console.WriteLine("Sending player number: " + server.Players.Count);
                     Send(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.PlayerNumber,
-                        PlayerNumber = server.PlayerCount
+                        PlayerNumber = server.Players.Count
                     }));
                     break;
 
                 case TcpMessageType.StartGameRequest:
-                    if (server.PlayerCount <= 1)
+                    if (server.Players.Count <= 1)
                         return;
 
                     Console.WriteLine("Server starting game!");
@@ -74,10 +78,10 @@ namespace SushiStop.Server
                     break;
 
                 case TcpMessageType.StartRoundRequest:
-                    server.Deck.ResetDeck();
+                    server.ResetForNewRound();
 
                     int numberOfStartingCards;
-                    switch (server.PlayerCount)
+                    switch (server.Players.Count)
                     {
                         case 2:
                             numberOfStartingCards = 10;
@@ -101,11 +105,13 @@ namespace SushiStop.Server
                     for (int i = 0; i < numberOfStartingCards; i++)
                         startingHand.Add(server.Deck.DrawRandomCard());
 
-                    Console.WriteLine($"Sending starting hand of {numberOfStartingCards} cards");
+                    player.Hand = startingHand;
+
+                    Console.WriteLine($"Sending starting hand of {player.Hand.Count} cards");
                     Send(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.StartRound,
-                        StartingHand = startingHand
+                        Hand = startingHand
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
                     break;
 

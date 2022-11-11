@@ -49,8 +49,8 @@ namespace SushiStop.Game.Networking
                 {
                     if (screenStack.CurrentScreen is PlayScreen playScreen)
                     {
-                        Logger.Log($"Received hand with {message.StartingHand.Count} cards");
-                        playScreen.Hand = message.StartingHand;
+                        Logger.Log($"Received hand with {message.Hand.Count} cards");
+                        playScreen.Hand = message.Hand;
                         playScreen.CreateDrawableHand();
                     }
                     break;
@@ -64,6 +64,8 @@ namespace SushiStop.Game.Networking
 
         protected override void OnDisconnected()
         {
+            // TODO: fix bug where disconnecting (wrong IP?) then trying to reconnect
+            // results in not being able to get a player number
             while (screenStack.CurrentScreen is not HomeScreen)
                 screenStack.Exit();
         }

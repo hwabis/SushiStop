@@ -52,7 +52,7 @@ namespace SushiStop.Game.Screens
                             Width = 100,
                             Height = 50,
                             BackgroundColour = Color4.DarkBlue,
-                            Action = requeststartGame,
+                            Action = requestStartGame,
                             Margin = new MarginPadding(5)
                         }
                     }
@@ -79,7 +79,7 @@ namespace SushiStop.Game.Screens
             Schedule(() => screenStack.Push(new PlayScreen(client, PlayerNumberBindable.Value)));
         }
 
-        private void requeststartGame()
+        private void requestStartGame()
         {
             // TODO: handle that 0.1 second when a player is in the lobby but
             // doesn't have a player number yet. just wait for everyone to have a number :)
