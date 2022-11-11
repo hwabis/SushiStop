@@ -10,6 +10,9 @@ namespace SushiStop.Server
         public List<Player> Players = new List<Player>();
         public CardDeck Deck = new CardDeck();
 
+        // Used for filtering out the duplicate RoundStartRequests that call ResetForNewRound() too many times 
+        public int StartRoundRequestCount = 0;
+
         public SushiStopServer(IPAddress address, int port)
             : base(address, port)
         {

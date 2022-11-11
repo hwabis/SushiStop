@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using NUnit.Framework.Internal;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -63,8 +62,11 @@ namespace SushiStop.Game.Screens
             {
                 Schedule(() => drawableHand.Add(card.CreateDrawableCard(() =>
                 {
-                    osu.Framework.Logging.Logger.Log("WHOA");
-                    // TODO: message the server
+                    client.SendAsync(JsonConvert.SerializeObject(new TcpMessage
+                    {
+                        Type = TcpMessageType.PlayedCard,
+                        PlayedCard = card
+                    }));
                 })));
             }
         }

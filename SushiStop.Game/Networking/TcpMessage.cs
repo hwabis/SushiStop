@@ -11,11 +11,14 @@ namespace SushiStop.Game.Networking
     {
         public TcpMessageType Type;
 
-        // Server TcpMessageType.PlayerNumber sets this
+        // Server message PlayerNumber sets this
         public int PlayerNumber;
 
-        // Server TcpMessageType.StartRound sets this
+        // Server message StartRound and NextTurn set this
         public List<Card> Hand;
+
+        // PlayedCard sets this
+        public Card PlayedCard;
     }
 
     public enum TcpMessageType
@@ -30,9 +33,15 @@ namespace SushiStop.Game.Networking
         // Server tells everyone to go to play screen
         StartGame,
 
-        // Three rounds per game
+        // Client starts a round. Three rounds per game. The client expects their new starting hand
         StartRoundRequest,
-        // Distribute starting hand to everyone
+        // Set up and give starting hands to everyone
         StartRound,
+
+        // Client played a card from their hand
+        PlayedCard,
+        // All players have played a card. Server sends everybody their new hands
+        // and what everybody just played
+        NextTurn
     }
 }

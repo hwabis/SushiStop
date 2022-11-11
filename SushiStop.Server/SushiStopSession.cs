@@ -1,6 +1,5 @@
 ﻿using System.Net.Sockets;
 using System.Text;
-using Commons.Music.Midi;
 using NetCoreServer;
 using Newtonsoft.Json;
 using SushiStop.Game.Cards;
@@ -78,7 +77,14 @@ namespace SushiStop.Server
                     break;
 
                 case TcpMessageType.StartRoundRequest:
-                    server.ResetForNewRound();
+                    Console.WriteLine($"Starting round");
+                    // We only want to reset for every [number of players] StartRoundRequests.
+                    if (server.StartRoundRequestCount % server.Players.Count == 0)
+                    {
+                        Console.WriteLine("Resetting deck!");
+                        server.ResetForNewRound();
+                    }
+                    server.StartRoundRequestCount++;
 
                     int numberOfStartingCards;
                     switch (server.Players.Count)
