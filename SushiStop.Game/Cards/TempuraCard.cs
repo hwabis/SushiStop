@@ -1,10 +1,9 @@
-﻿using osu.Framework.Graphics.Containers;
-using SushiStop.Game.Cards.Drawables;
+﻿using SushiStop.Game.Cards.Drawables;
 
 namespace SushiStop.Game.Cards
 {
     public class TempuraCard : Card
     {
-        public override CompositeDrawable CreateDrawableCard() => new DrawableTempuraCard(this);
+        public override DrawableCard CreateDrawableCard() => new DrawableTempuraCard(this);
     }
 }

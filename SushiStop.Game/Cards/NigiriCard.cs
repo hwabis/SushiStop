@@ -1,5 +1,4 @@
-﻿using osu.Framework.Graphics.Containers;
-using SushiStop.Game.Cards.Drawables;
+﻿using SushiStop.Game.Cards.Drawables;
 
 namespace SushiStop.Game.Cards
 {
@@ -13,6 +12,6 @@ namespace SushiStop.Game.Cards
             Value = count;
         }
 
-        public override CompositeDrawable CreateDrawableCard() => new DrawableNigiriCard(this, Value);
+        public override DrawableCard CreateDrawableCard() => new DrawableNigiriCard(this, Value);
     }
 }
