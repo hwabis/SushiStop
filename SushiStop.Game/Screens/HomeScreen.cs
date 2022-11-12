@@ -80,9 +80,9 @@ namespace SushiStop.Game.Screens
             this.screenStack = screenStack;
         }
 
-        public override void OnEntering(ScreenTransitionEvent e)
+        public override void OnResuming(ScreenTransitionEvent e)
         {
-            base.OnEntering(e);
+            base.OnResuming(e);
 
             enableConnectButton(true);
         }

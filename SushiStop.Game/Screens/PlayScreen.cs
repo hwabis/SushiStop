@@ -23,7 +23,7 @@ namespace SushiStop.Game.Screens
         // Limit can be immediately raised to 2 (client-side) by using Chopsticks
         private int selectedCardsLimit = 1;
 
-        // TODO: replace with a Button that can be Enabled or Disabled in the class itself?
+        // Replace with a Button that can be Enabled or Disabled in the class itself?
         private BasicButton chopsticksButton;
         private BasicButton sendButton;
 
