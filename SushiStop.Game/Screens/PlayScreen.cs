@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -79,7 +80,7 @@ namespace SushiStop.Game.Screens
                     {
                         chopsticksButton = new BasicButton
                         {
-                            Text = "Use chopsticks!",
+                            Text = "Use gem!",
                             Width = 160,
                             Height = 40,
                             BackgroundColour = Color4.MediumBlue,
@@ -183,9 +184,13 @@ namespace SushiStop.Game.Screens
 
         private void useChopsticks()
         {
-            if (canUseChopsticks) // TODO: also check that the player also has chopsticks,
-                                  // then remove it from Player.PlayedCards and add it to Player.Hand
+            Card chopsticksCard = Player.PlayedCards.FirstOrDefault(card => card is ChopsticksCard);
+            if (canUseChopsticks && chopsticksCard != null)
             {
+                Player.PlayedCards.Remove(chopsticksCard);
+                Player.Hand.Add(chopsticksCard);
+
+                CreateDrawablePlayedCards();
                 enableChopsticksButton(false);
                 selectedCardsLimit = 2;
             }
