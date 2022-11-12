@@ -53,15 +53,16 @@ namespace SushiStop.Game.Screens
                     Child = drawableHand = new FillFlowContainer<DrawableCard>
                     {
                         AutoSizeAxes = Axes.Both,
-                        Direction = FillDirection.Horizontal
+                        Direction = FillDirection.Horizontal,
+                        // Spacing = new Vector2(-42, 0)
                     }
                 },
                 new FillFlowContainer
                 {
                     Anchor = Anchor.CentreLeft,
                     Origin = Anchor.CentreLeft,
-                    Spacing = new Vector2(0, 10),
-                    Y = 70,
+                    Spacing = new Vector2(0, 5),
+                    Y = 120,
                     Children = new Drawable[]
                     {
                         chopsticksButton = new BasicButton

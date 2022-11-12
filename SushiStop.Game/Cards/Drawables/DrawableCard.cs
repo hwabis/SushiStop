@@ -72,8 +72,8 @@ namespace SushiStop.Game.Cards.Drawables
                 cornerContainer.Add(new Sprite
                 {
                     Texture = textures.Get(textureName),
-                    Width = cardContainer.Width / 4,
-                    Height = cardContainer.Width / 4 / originalRatio
+                    Width = cardContainer.Width / 3,
+                    Height = cardContainer.Width / 3 / originalRatio
                 });
             }
 
