@@ -7,8 +7,8 @@ namespace SushiStop.Game.Cards.Drawables
 {
     public class DrawableSashimiCard : DrawableCard
     {
-        public DrawableSashimiCard(SashimiCard card, Action onClick = null)
-            : base(card, onClick, Color4.YellowGreen, "sashimi", "x3=10", 1)
+        public DrawableSashimiCard(SashimiCard card)
+            : base(card, Color4.YellowGreen, "sashimi", "x3=10", 1)
         {
         }
 

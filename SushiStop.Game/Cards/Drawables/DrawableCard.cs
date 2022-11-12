@@ -18,10 +18,11 @@ namespace SushiStop.Game.Cards.Drawables
         private string textureName;
         private string descriptionText;
         private int cornerSpriteCount;
-        // onClick may be null
-        private Action onClick;
 
-        public DrawableCard(Card card, Action onClick, Color4 backgroundColor, string textureName, string descriptionText, int cornerSpriteCount)
+        // um assign this before the card is loaded. um. I probably did something wrong here
+        public Action OnClickForHand;
+
+        public DrawableCard(Card card, Color4 backgroundColor, string textureName, string descriptionText, int cornerSpriteCount)
         {
             Origin = Anchor.Centre;
             Card = card;
@@ -30,7 +31,6 @@ namespace SushiStop.Game.Cards.Drawables
             this.textureName = textureName;
             this.descriptionText = descriptionText;
             this.cornerSpriteCount = cornerSpriteCount;
-            this.onClick = onClick;
         }
 
         /// <summary>
@@ -53,9 +53,11 @@ namespace SushiStop.Game.Cards.Drawables
             centerSprite.Height = centerSprite.Width / originalRatio;
             cardContainer.Add(centerSprite);
 
+            // Technically only Maki Roll needs this to be a FlowFillContainer
+            // but I'd rather just keep all this loading stuff in one spot and consistent.
             FillFlowContainer cornerContainer;
             cardContainer.Add(cornerContainer = new FillFlowContainer
-            {     
+            {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
                 Direction = FillDirection.Vertical,
@@ -95,19 +97,28 @@ namespace SushiStop.Game.Cards.Drawables
                     }
                 }
             });
-        }
 
-        protected override void LoadComplete()
-        {
-            base.LoadComplete();
-
-            if (onClick != null)
+            if (OnClickForHand != null)
             {
                 cardContainer.Add(new ClickableContainer
                 {
                     RelativeSizeAxes = Axes.Both,
-                    Action = onClick
+                    Action = OnClickForHand
                 });
+            }
+        }
+
+        public void Highlight(bool on)
+        {
+            if (on)
+            {
+                cardContainer.BorderColour = Color4.Cyan;
+                cardContainer.BorderThickness = 7;
+            }
+            else
+            {
+                cardContainer.BorderColour = Color4.White;
+                cardContainer.BorderThickness = 2;
             }
         }
     }

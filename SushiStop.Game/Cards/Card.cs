@@ -5,6 +5,6 @@ namespace SushiStop.Game.Cards
 {
     public abstract class Card
     {
-        public abstract DrawableCard CreateDrawableCard(Action onClick = null);
+        public abstract DrawableCard CreateDrawableCard();
     }
 }

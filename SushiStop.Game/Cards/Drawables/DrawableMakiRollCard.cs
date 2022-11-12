@@ -7,8 +7,8 @@ namespace SushiStop.Game.Cards.Drawables
 {
     public class DrawableMakiRollCard : DrawableCard
     {
-        public DrawableMakiRollCard(MakiRollCard card, Action onClick = null)
-            : base(card, onClick, Color4.DarkRed, "maki_roll", "most: 6/3", card.Count)
+        public DrawableMakiRollCard(MakiRollCard card)
+            : base(card, Color4.DarkRed, "maki_roll", "most: 6/3", card.Count)
         {
         }
 

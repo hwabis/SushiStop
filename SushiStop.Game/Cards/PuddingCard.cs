@@ -5,7 +5,6 @@ namespace SushiStop.Game.Cards
 {
     public class PuddingCard : Card
     {
-        public override DrawableCard CreateDrawableCard(Action onClick = null) =>
-            new DrawablePuddingCard(this, onClick);
+        public override DrawableCard CreateDrawableCard() => new DrawablePuddingCard(this);
     }
 }

@@ -16,7 +16,6 @@ namespace SushiStop.Game.Cards
             Count = count;
         }
 
-        public override DrawableCard CreateDrawableCard(Action onClick = null) =>
-            new DrawableMakiRollCard(this, onClick);
+        public override DrawableCard CreateDrawableCard() => new DrawableMakiRollCard(this);
     }
 }

@@ -7,8 +7,8 @@ namespace SushiStop.Game.Cards.Drawables
 {
     public class DrawableDumplingCard : DrawableCard
     {
-        public DrawableDumplingCard(DumplingCard card, Action onClick = null)
-            : base(card, onClick, Color4.CornflowerBlue, "dumpling", "1 3 6 10 15", 1)
+        public DrawableDumplingCard(DumplingCard card)
+            : base(card, Color4.CornflowerBlue, "dumpling", "1 3 6 10 15", 1)
         {
         }
 

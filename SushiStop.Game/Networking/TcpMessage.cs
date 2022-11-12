@@ -17,8 +17,9 @@ namespace SushiStop.Game.Networking
         // Server message StartRound and NextTurn set this
         public List<Card> Hand;
 
-        // PlayedCard sets this
-        public Card PlayedCard;
+        // PlayedCard sets this (if Count == 2 then the server knows to move a chopstick card
+        // from played cards to hand)
+        public List<Card> PlayedCards;
     }
 
     public enum TcpMessageType
@@ -38,7 +39,8 @@ namespace SushiStop.Game.Networking
         // Set up and give starting hands to everyone
         StartRound,
 
-        // Client played a card from their hand
+        // Client played a card from their hand. Could also be PlayedCards (for chopsticks),
+        // but in most cases, just one card is played.
         PlayedCard,
         // All players have played a card. Server sends everybody their new hands
         // and what everybody just played
