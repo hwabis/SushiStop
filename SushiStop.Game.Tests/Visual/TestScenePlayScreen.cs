@@ -17,13 +17,67 @@ namespace SushiStop.Game.Tests.Visual
 
         public TestScenePlayScreen()
         {
-            screenStack.Push(playScreen = new PlayScreen(null, 1));
+            screenStack.Push(playScreen = new PlayScreen(null, 3));
             Add(screenStack);
 
             playScreen.Players = new List<Player>()
             {
-                new Player { Number = 1 },
-                new Player { Number = 2 }
+                new Player
+                {
+                    Number = 1,
+                    PlayedCards = new List<Card>()
+                    {
+                        new SashimiCard(),
+                        new TempuraCard()
+                    }
+                },
+                new Player
+                {
+                    Number = 2,
+                    PlayedCards = new List<Card>()
+                    {
+                        new WasabiCard(),
+                        new NigiriCard(3),
+                        new MakiRollCard(2)
+                    }
+                },
+                new Player
+                {
+                    Number = 3,
+                    PlayedCards = new List<Card>()
+                    {
+                        new WasabiCard(),
+                        new NigiriCard(3),
+                        new MakiRollCard(2)
+                    }
+                },
+                new Player
+                {
+                    Number = 4,
+                    PlayedCards = new List<Card>()
+                    {
+                        new WasabiCard(),
+                        new NigiriCard(3),
+                        new MakiRollCard(2)
+                    }
+                },
+                 new Player
+                {
+                    Number = 5,
+                    PlayedCards = new List<Card>()
+                    {
+                        new WasabiCard(),
+                        new NigiriCard(3),
+                        new MakiRollCard(3),
+                        new PuddingCard(),
+                        new TempuraCard(),
+                        new SashimiCard(),
+                        new MakiRollCard(1),
+                        new NigiriCard(2),
+                        new ChopsticksCard(),
+                        new DumplingCard()
+                    }
+                }
             };
             playScreen.Player.Hand = new List<Card>()
             {
@@ -41,6 +95,7 @@ namespace SushiStop.Game.Tests.Visual
                 new WasabiCard(),
                 new ChopsticksCard()
             };
+            playScreen.CreateDrawablePlayedCards();
             playScreen.CreateDrawableHand();
         }
     }

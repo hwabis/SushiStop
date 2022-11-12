@@ -53,6 +53,7 @@ namespace SushiStop.Game.Networking
                         playScreen.Players = message.Players;
                         Logger.Log($"Received hand with {playScreen.Player.Hand.Count} cards");
                         playScreen.ResetForNewTurn();
+                        playScreen.CreateDrawablePlayedCards();
                         playScreen.CreateDrawableHand();
                     }
                     break;

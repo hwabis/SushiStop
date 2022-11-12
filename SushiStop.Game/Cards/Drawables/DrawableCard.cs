@@ -62,7 +62,6 @@ namespace SushiStop.Game.Cards.Drawables
             {
                 Anchor = Anchor.TopLeft,
                 Origin = Anchor.TopLeft,
-                Direction = FillDirection.Vertical,
                 X = 2,
                 Y = 2,
                 AutoSizeAxes = Axes.Both

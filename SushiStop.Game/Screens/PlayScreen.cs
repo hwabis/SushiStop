@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
 using osuTK;
@@ -19,7 +20,10 @@ namespace SushiStop.Game.Screens
         public List<Player> Players { get; set; }
         private int playerNumber;
 
-        public Player Player => Players[playerNumber - 1];
+        public Player Player => Players.Find(player => player.Number == playerNumber);
+
+        // Each member at index i is a column representing the PlayedCards of Player with Number i + 1
+        private FillFlowContainer<FillFlowContainer> playedCards;
 
         private FillFlowContainer<DrawableCard> drawableHand;
         private List<DrawableCard> selectedCards = new List<DrawableCard>();
@@ -48,17 +52,22 @@ namespace SushiStop.Game.Screens
         {
             InternalChildren = new Drawable[]
             {
-                new Container
+                playedCards = new FillFlowContainer<FillFlowContainer>
+                {
+                    AutoSizeAxes = Axes.Both,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Direction = FillDirection.Horizontal,
+                    // Why do I need these...
+                    Spacing = new Vector2(54, 0),
+                    Y = 46
+                },
+                drawableHand = new FillFlowContainer<DrawableCard>
                 {
                     AutoSizeAxes = Axes.Both,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
-                    Child = drawableHand = new FillFlowContainer<DrawableCard>
-                    {
-                        AutoSizeAxes = Axes.Both,
-                        Direction = FillDirection.Horizontal,
-                        // Spacing = new Vector2(-42, 0)
-                    }
+                    Direction = FillDirection.Horizontal
                 },
                 new FillFlowContainer
                 {
@@ -93,8 +102,6 @@ namespace SushiStop.Game.Screens
         {
             base.LoadComplete();
 
-            // TODO: Highlight our player's row
-
             // Client may be null when we passed it as null in the constructor (FOR TEST SCENE PURPOSES ONLY)
             client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
             {
@@ -102,26 +109,68 @@ namespace SushiStop.Game.Screens
             }));
         }
 
+        public void CreateDrawablePlayedCards()
+        {
+            Schedule(() =>
+            {
+                // Null check in case this isn't loaded yet? Which means it was empty anyway?
+                playedCards?.Clear();
+                foreach (Player player in Players)
+                {
+                    FillFlowContainer playedCardsRow;
+                    playedCards.Add(playedCardsRow = new FillFlowContainer
+                    {
+                        Anchor = Anchor.TopCentre,
+                        Origin = Anchor.TopCentre,
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Vertical,
+                        Spacing = new Vector2(0, -104)
+                    });
+
+                    SpriteText pText;
+                    playedCardsRow.Add(pText = new SpriteText
+                    {
+                        Text = $"P{player.Number}: ",
+                        Origin = Anchor.BottomCentre,
+                        Font = FontUsage.Default.With(size: 20)
+                    });
+                    if (player.Number == playerNumber)
+                        pText.Text = $"YOU ARE P{player.Number}: ";
+
+                    foreach (Card card in player.PlayedCards)
+                    {
+                        DrawableCard drawableCard = card.CreateDrawableCard();
+                        drawableCard.Origin = Anchor.TopCentre;
+                        playedCardsRow.Add(drawableCard);
+                    }
+                }
+            });
+        }
+
         public void CreateDrawableHand()
         {
-            foreach (Card card in Player.Hand)
+            Schedule(() =>
             {
-                DrawableCard drawableCard = card.CreateDrawableCard();
-                drawableCard.OnClickForHand = () =>
+                drawableHand?.Clear();
+                foreach (Card card in Player.Hand)
                 {
-                    if (selectedCards.Contains(drawableCard))
+                    DrawableCard drawableCard = card.CreateDrawableCard();
+                    drawableCard.OnClickForHand = () =>
                     {
-                        selectedCards.Remove(drawableCard);
-                        drawableCard.Highlight(false);
-                    }
-                    else if (selectedCards.Count < selectedCardsLimit)
-                    {
-                        selectedCards.Add(drawableCard);
-                        drawableCard.Highlight(true);
-                    }
-                };
-                Schedule(() => drawableHand.Add(drawableCard));
-            }
+                        if (selectedCards.Contains(drawableCard))
+                        {
+                            selectedCards.Remove(drawableCard);
+                            drawableCard.Highlight(false);
+                        }
+                        else if (selectedCards.Count < selectedCardsLimit)
+                        {
+                            selectedCards.Add(drawableCard);
+                            drawableCard.Highlight(true);
+                        }
+                    };
+                    drawableHand.Add(drawableCard);
+                }
+            });
         }
 
         public void ResetForNewTurn()
