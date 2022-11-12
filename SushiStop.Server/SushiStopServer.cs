@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using NetCoreServer;
+using SushiStop.Game;
 
 namespace SushiStop.Server
 {
     public class SushiStopServer : TcpServer
     {
-        // Player 1 is the Players[0], ...
         public List<Player> Players = new List<Player>();
         public CardDeck Deck = new CardDeck();
 

@@ -20,7 +20,7 @@ namespace SushiStop.Game.Tests.Visual
             screenStack.Push(playScreen = new PlayScreen(null, 1));
             Add(screenStack);
 
-            playScreen.Hand = new List<Card>()
+            playScreen.Player.Hand = new List<Card>()
             {
                 // Can't fit all 12 here or else the FillFlowContainer will mask away the edge cards
                 new TempuraCard(),

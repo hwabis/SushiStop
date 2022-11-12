@@ -14,12 +14,16 @@ namespace SushiStop.Game.Networking
         // Server message PlayerNumber sets this
         public int PlayerNumber;
 
-        // Server message StartRound and NextTurn set this
-        public List<Card> Hand;
+        // Server StartRound sets this (we don't have to all players because we know
+        // at the start of a round, PlayedCards will be empty)
+        public List<Card> StartingHand;
 
-        // PlayedCard sets this (if Count == 2 then the server knows to move a chopstick card
-        // from played cards to hand)
-        public List<Card> PlayedCards;
+        // Client message PlayedCard sets this
+        public Player Player;
+
+        // Server message StartRound and NextTurn sets this
+        // TODO: make it so only the intended recepients can see their hands
+        public List<Player> Players;
     }
 
     public enum TcpMessageType
@@ -39,11 +43,11 @@ namespace SushiStop.Game.Networking
         // Set up and give starting hands to everyone
         StartRound,
 
-        // Client played a card from their hand. Could also be PlayedCards (for chopsticks),
-        // but in most cases, just one card is played.
+        // Client played a card from their hand (or two for chopsticks),
+        // and sends their Player instance object to the server
         PlayedCard,
-        // All players have played a card. Server sends everybody their new hands
-        // and what everybody just played
+        // All players have played a card. Server sends everybody a list of every Player
+        // (1. their new hands and 2. the updated list of played cards of every player)
         NextTurn
     }
 }

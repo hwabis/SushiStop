@@ -49,8 +49,10 @@ namespace SushiStop.Game.Networking
                 {
                     if (screenStack.CurrentScreen is PlayScreen playScreen)
                     {
-                        Logger.Log($"Received hand with {message.Hand.Count} cards");
-                        playScreen.Hand = message.Hand;
+                        Logger.Log($"Received hand with {message.StartingHand.Count} cards");
+                        playScreen.ResetForNewTurn();
+                        playScreen.Player.Hand = message.StartingHand;
+                        playScreen.Player.PlayedCards.Clear();
                         playScreen.CreateDrawableHand();
                     }
                     break;

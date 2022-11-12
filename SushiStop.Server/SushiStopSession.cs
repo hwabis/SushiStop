@@ -2,6 +2,7 @@
 using System.Text;
 using NetCoreServer;
 using Newtonsoft.Json;
+using SushiStop.Game;
 using SushiStop.Game.Cards;
 using SushiStop.Game.Networking;
 
@@ -21,8 +22,7 @@ namespace SushiStop.Server
         protected override void OnConnected()
         {
             Console.WriteLine($"TCP session with Id {Id} connected!");
-            player = new Player(Id);
-            server.Players.Add(player);
+            server.Players.Add(player = new Player());
         }
 
         protected override void OnDisconnected()
@@ -54,11 +54,13 @@ namespace SushiStop.Server
                         break;
                     }
 
-                    Console.WriteLine("Sending player number: " + server.Players.Count);
+                    player.Number = server.Players.Count;
+
+                    Console.WriteLine("Sending player number: " + player.Number);
                     Send(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.PlayerNumber,
-                        PlayerNumber = server.Players.Count
+                        PlayerNumber = player.Number
                     }));
                     break;
 
@@ -113,7 +115,7 @@ namespace SushiStop.Server
                     Send(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.StartRound,
-                        Hand = startingHand
+                        StartingHand = startingHand
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
                     break;
 

@@ -13,12 +13,11 @@ using SushiStop.Game.Networking;
 
 namespace SushiStop.Game.Screens
 {
-    // TODO: client should call ResetForNewRound()
+    // TODO: client should call ResetForNewTurn() when NextTurn is received
     public class PlayScreen : Screen
     {
         // Player-related info
-        public List<Card> Hand { get; set; }
-        private int playerNumber;
+        public Player Player { get; set; } = new Player();
 
         private FillFlowContainer<DrawableCard> drawableHand;
         private List<DrawableCard> selectedCards = new List<DrawableCard>();
@@ -35,7 +34,7 @@ namespace SushiStop.Game.Screens
         public PlayScreen(SushiStopClient client, int playerNumber)
         {
             this.client = client;
-            this.playerNumber = playerNumber;
+            Player.Number = playerNumber;
         }
 
         [BackgroundDependencyLoader]
@@ -96,7 +95,7 @@ namespace SushiStop.Game.Screens
 
         public void CreateDrawableHand()
         {
-            foreach (Card card in Hand)
+            foreach (Card card in Player.Hand)
             {
                 DrawableCard drawableCard = card.CreateDrawableCard();
                 drawableCard.OnClickForHand = () =>
@@ -116,7 +115,7 @@ namespace SushiStop.Game.Screens
             }
         }
 
-        public void ResetForNewRound()
+        public void ResetForNewTurn()
         {
             selectedCards.Clear();
             selectedCardsLimit = 1;
@@ -126,7 +125,8 @@ namespace SushiStop.Game.Screens
 
         private void useChopsticks()
         {
-            if (canUseChopsticks) // TODO: also check that the player also has chopsticks
+            if (canUseChopsticks) // TODO: also check that the player also has chopsticks,
+                                  // then remove it from played cards
             {
                 canUseChopsticks = false;
                 selectedCardsLimit = 2;
@@ -135,20 +135,30 @@ namespace SushiStop.Game.Screens
 
         private void confirmCardSelection()
         {
-            if (selectedCards.Count > 0 && canSendCards)
-            {
-                canSendCards = false;
-                List<Card> cards = new List<Card>();
-                foreach (DrawableCard drawableCard in selectedCards)
-                    cards.Add(drawableCard.Card);
+            if (!canSendCards)
+                return;
 
-                // null check again so the test scene works
-                client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
-                {
-                    Type = TcpMessageType.PlayedCard,
-                    PlayedCards = cards
-                }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
+            // This enforces that you send at one card, or if you used chopsticks,
+            // you must send two
+            if (selectedCards.Count < 1 || (selectedCards.Count < 2 && !canUseChopsticks))
+                return;
+
+            canSendCards = false;
+
+            foreach (DrawableCard selectedCard in selectedCards)
+            {
+                Player.Hand.Remove(selectedCard.Card);
+                Player.PlayedCards.Add(selectedCard.Card);
             }
+
+            // null check again so the test scene works
+            client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
+            {
+                Type = TcpMessageType.PlayedCard,
+                Player = Player
+            }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
+
+            // TODO: "waiting for other players" or something
         }
     }
 }
