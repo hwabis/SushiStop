@@ -18,14 +18,12 @@ namespace SushiStop.Game.Tests.Visual
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 AutoSizeAxes = Axes.Both,
-                Spacing = new Vector2(92, 0),
                 Children = new Drawable[]
                 {
-                    // Why the gap ??
-                    new DrawableTempuraCard(new TempuraCard()),
+                    new DrawableNigiriCard(new NigiriCard(2)),
                     new DrawableTempuraCard(new TempuraCard()),
                     new CardBackground(Color4.DarkRed),
-                    new DrawableTempuraCard(new TempuraCard()),
+                    new DrawableMakiRollCard(new MakiRollCard(3)),
                     new DrawableTempuraCard(new TempuraCard()),
                 }
             });

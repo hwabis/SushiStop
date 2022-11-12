@@ -16,6 +16,6 @@ namespace SushiStop.Game.Cards
             Value = value;
         }
 
-        public override DrawableCard CreateDrawableCard() => new DrawableNigiriCard(this, Value);
+        public override DrawableCard CreateDrawableCard() => new DrawableNigiriCard(this);
     }
 }

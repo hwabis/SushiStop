@@ -15,10 +15,10 @@ namespace SushiStop.Game.Networking
         public int PlayerNumber;
 
         // Server message StartRound sets this (we don't have to all players because we know
-        // at the start of a round, PlayedCards will be empty)
+        // at the start of a round, Player.PlayedCards will be empty)
         public List<Card> StartingHand;
 
-        // Client message PlayedCard sets this
+        // Client message EndTurn sets this
         public Player Player;
 
         // Server message NextTurn sets this
@@ -45,7 +45,7 @@ namespace SushiStop.Game.Networking
 
         // Client played a card from their hand (or two for chopsticks),
         // and sends their Player instance object to the server
-        PlayedCard,
+        EndTurn,
         // All players have played a card. Server sends everybody a list of every Player
         // (1. their new hands and 2. the updated list of played cards of every player)
         NextTurn

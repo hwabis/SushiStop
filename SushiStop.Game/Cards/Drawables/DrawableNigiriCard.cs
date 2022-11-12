@@ -7,8 +7,8 @@ namespace SushiStop.Game.Cards.Drawables
 {
     public class DrawableNigiriCard : DrawableCard
     {
-        public DrawableNigiriCard(NigiriCard card, int value)
-            : base(card, Color4.Gold, getTextureNameFromValue(value), value.ToString(), 1)
+        public DrawableNigiriCard(NigiriCard card)
+            : base(card, Color4.Gold, getTextureNameFromValue(card.Value), card.Value.ToString(), 1)
         {
         }
 

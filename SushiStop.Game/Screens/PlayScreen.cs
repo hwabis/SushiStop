@@ -25,12 +25,12 @@ namespace SushiStop.Game.Screens
 
         // Replace with a Button that can be Enabled or Disabled in the class itself?
         private BasicButton chopsticksButton;
-        private BasicButton sendButton;
+        private BasicButton endTurnButton;
 
         // Can only use one chopsticks per round
         private bool canUseChopsticks = true;
         // Is disabled after sending cards to the server to prevent spam clicking
-        private bool canSendCards = true;
+        private bool canEndTurn = true;
 
         private SushiStopClient client;
 
@@ -73,9 +73,9 @@ namespace SushiStop.Game.Screens
                             BackgroundColour = Color4.MediumBlue,
                             Action = useChopsticks
                         },
-                        sendButton = new BasicButton
+                        endTurnButton = new BasicButton
                         {
-                            Text = "Send!",
+                            Text = "End turn!",
                             Width = 80,
                             Height = 40,
                             BackgroundColour = Color4.MediumBlue,
@@ -126,7 +126,7 @@ namespace SushiStop.Game.Screens
             selectedCards.Clear();
             selectedCardsLimit = 1;
             enableChopsticksButton(true);
-            enableSendButton(true);
+            enableEndTurnButton(true);
         }
 
         private void useChopsticks()
@@ -141,7 +141,7 @@ namespace SushiStop.Game.Screens
 
         private void confirmCardSelection()
         {
-            if (!canSendCards)
+            if (!canEndTurn)
                 return;
 
             // This enforces that you send at one card, or if you used chopsticks, you must send two
@@ -149,7 +149,7 @@ namespace SushiStop.Game.Screens
                 return;
 
             enableChopsticksButton(false);
-            enableSendButton(false);
+            enableEndTurnButton(false);
 
             foreach (DrawableCard selectedCard in selectedCards)
             {
@@ -160,7 +160,7 @@ namespace SushiStop.Game.Screens
             // null check again so the test scene works
             client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
             {
-                Type = TcpMessageType.PlayedCard,
+                Type = TcpMessageType.EndTurn,
                 Player = Player
             }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
 
@@ -181,17 +181,17 @@ namespace SushiStop.Game.Screens
             }
         }
 
-        private void enableSendButton(bool enable)
+        private void enableEndTurnButton(bool enable)
         {
             if (enable)
             {
-                canSendCards = true;
-                Schedule(() => sendButton.BackgroundColour = Color4.MediumBlue);
+                canEndTurn = true;
+                Schedule(() => endTurnButton.BackgroundColour = Color4.MediumBlue);
             }
             else
             {
-                canSendCards = false;
-                Schedule(() => sendButton.BackgroundColour = Color4.Red);
+                canEndTurn = false;
+                Schedule(() => endTurnButton.BackgroundColour = Color4.Red);
             }
         }
     }

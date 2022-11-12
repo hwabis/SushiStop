@@ -119,7 +119,7 @@ namespace SushiStop.Server
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
                     break;
 
-                case TcpMessageType.PlayedCard:
+                case TcpMessageType.EndTurn:
                     // TODO
                     break;
 
