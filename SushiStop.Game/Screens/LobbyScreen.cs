@@ -81,9 +81,6 @@ namespace SushiStop.Game.Screens
 
         private void requestStartGame()
         {
-            // TODO: handle that 0.1 second when a player is in the lobby but
-            // doesn't have a player number yet. just wait for everyone to have a number :)
-
             client.SendAsync(JsonConvert.SerializeObject(new TcpMessage
             {
                 Type = TcpMessageType.StartGameRequest

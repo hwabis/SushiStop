@@ -13,6 +13,7 @@ using SushiStop.Game.Networking;
 
 namespace SushiStop.Game.Screens
 {
+    // TODO: client should call ResetForNewRound()
     public class PlayScreen : Screen
     {
         // Player-related info
@@ -24,8 +25,10 @@ namespace SushiStop.Game.Screens
         // Limit can be immediately raised to 2 (client-side) by using Chopsticks
         private int selectedCardsLimit = 1;
 
+        // Can only use one chopsticks per round
+        private bool canUseChopsticks = true;
         // Is disabled after sending cards to the server to prevent spam clicking
-        public bool CanSendCards = true;
+        private bool canSendCards = true;
 
         private SushiStopClient client;
 
@@ -49,17 +52,31 @@ namespace SushiStop.Game.Screens
                     Spacing = new Vector2(94, 0),
                     Y = -70
                 },
-                new BasicButton
+                new FillFlowContainer
                 {
-                    Text = "Send!",
-                    Anchor = Anchor.CentreRight,
-                    Origin = Anchor.CentreRight,
-                    Width = 80,
-                    Height = 80,
-                    X = -10,
-                    Y = 150,
-                    BackgroundColour = Color4.DarkBlue,
-                    Action = confirmCardSelection
+                    Anchor = Anchor.CentreLeft,
+                    Origin = Anchor.CentreLeft,
+                    Spacing = new Vector2(0, 10),
+                    Y = 70,
+                    Children = new Drawable[]
+                    {
+                        new BasicButton
+                        {
+                            Text = "Use chopsticks!",
+                            Width = 160,
+                            Height = 40,
+                            BackgroundColour = Color4.DarkBlue,
+                            Action = useChopsticks
+                        },
+                        new BasicButton
+                        {
+                            Text = "Send!",
+                            Width = 80,
+                            Height = 40,
+                            BackgroundColour = Color4.DarkBlue,
+                            Action = confirmCardSelection
+                        }
+                    }
                 }
             };
         }
@@ -99,11 +116,28 @@ namespace SushiStop.Game.Screens
             }
         }
 
+        public void ResetForNewRound()
+        {
+            selectedCards.Clear();
+            selectedCardsLimit = 1;
+            canUseChopsticks = true;
+            canSendCards = true;
+        }
+
+        private void useChopsticks()
+        {
+            if (canUseChopsticks) // TODO: also check that the player also has chopsticks
+            {
+                canUseChopsticks = false;
+                selectedCardsLimit = 2;
+            }
+        }
+
         private void confirmCardSelection()
         {
-            if (selectedCards.Count > 0)
+            if (selectedCards.Count > 0 && canSendCards)
             {
-                CanSendCards = false;
+                canSendCards = false;
                 List<Card> cards = new List<Card>();
                 foreach (DrawableCard drawableCard in selectedCards)
                     cards.Add(drawableCard.Card);

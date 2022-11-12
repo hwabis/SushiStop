@@ -29,8 +29,6 @@ namespace SushiStop.Server
         {
             Console.WriteLine($"TCP session with Id {Id} disconnected!");
             server.Players.Remove(player);
-
-            // TODO: broadcast disconnect?
         }
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
@@ -52,8 +50,6 @@ namespace SushiStop.Server
                     if (server.Players.Count > 5)
                     {
                         // We're already at the max player limit
-                        // TODO: all this lobby stuff and player tracking stuff is messed up when a player disconnects.
-                        // This only works assuming everyone joins and doesn't leave
                         Disconnect();
                         break;
                     }
@@ -107,7 +103,6 @@ namespace SushiStop.Server
                             return;
                     }
 
-                    // TODO: check that this is synchronized..? Every client is gonna be doing this at the same time
                     List<Card> startingHand = new List<Card>();
                     for (int i = 0; i < numberOfStartingCards; i++)
                         startingHand.Add(server.Deck.DrawRandomCard());

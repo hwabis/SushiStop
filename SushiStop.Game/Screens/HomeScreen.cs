@@ -90,7 +90,6 @@ namespace SushiStop.Game.Screens
         private void connectToServer()
         {
             // Use 127.0.0.1 for testing
-            // TODO: check if you're connecting to an address/port that isn't being listened...?
             IPAddress address;
             int port;
             try
@@ -105,7 +104,7 @@ namespace SushiStop.Game.Screens
             }
             SushiStopClient client = new SushiStopClient(address, port, screenStack);
 
-            // TODO: not sure why this isn't awaitable.
+            // Not sure why this isn't awaitable.
             // I need to await this so that we don't accidentally connect after we've already
             // send a PlayerNumberRequest, but I can't. So, this is a (terrible) solution for now.
 
