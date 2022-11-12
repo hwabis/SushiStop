@@ -14,14 +14,14 @@ namespace SushiStop.Game.Networking
         // Server message PlayerNumber sets this
         public int PlayerNumber;
 
-        // Server StartRound sets this (we don't have to all players because we know
+        // Server message StartRound sets this (we don't have to all players because we know
         // at the start of a round, PlayedCards will be empty)
         public List<Card> StartingHand;
 
         // Client message PlayedCard sets this
         public Player Player;
 
-        // Server message StartRound and NextTurn sets this
+        // Server message NextTurn sets this
         // TODO: make it so only the intended recepients can see their hands
         public List<Player> Players;
     }

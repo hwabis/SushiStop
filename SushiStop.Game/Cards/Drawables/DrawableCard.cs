@@ -25,6 +25,7 @@ namespace SushiStop.Game.Cards.Drawables
         public DrawableCard(Card card, Color4 backgroundColor, string textureName, string descriptionText, int cornerSpriteCount)
         {
             Origin = Anchor.Centre;
+            AutoSizeAxes = Axes.Both;
             Card = card;
 
             this.backgroundColor = backgroundColor;
@@ -41,6 +42,7 @@ namespace SushiStop.Game.Cards.Drawables
         protected void OnLoad(TextureStore textures)
         {
             InternalChild = cardContainer = new CardBackground(backgroundColor);
+            cardContainer.Anchor = Anchor.Centre;
 
             Sprite centerSprite = new Sprite
             {

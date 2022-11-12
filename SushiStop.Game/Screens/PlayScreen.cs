@@ -16,13 +16,16 @@ namespace SushiStop.Game.Screens
     // TODO: client should call ResetForNewTurn() when NextTurn is received
     public class PlayScreen : Screen
     {
-        // Player-related info
         public Player Player { get; set; } = new Player();
 
         private FillFlowContainer<DrawableCard> drawableHand;
         private List<DrawableCard> selectedCards = new List<DrawableCard>();
         // Limit can be immediately raised to 2 (client-side) by using Chopsticks
         private int selectedCardsLimit = 1;
+
+        // TODO: replace with a Button that can be Enabled or Disabled in the class itself?
+        private BasicButton chopsticksButton;
+        private BasicButton sendButton;
 
         // Can only use one chopsticks per round
         private bool canUseChopsticks = true;
@@ -42,14 +45,16 @@ namespace SushiStop.Game.Screens
         {
             InternalChildren = new Drawable[]
             {
-                drawableHand = new FillFlowContainer<DrawableCard>
+                new Container
                 {
-                    // I'm doing something wrong here... Y = -70 shouldn't be needed
+                    AutoSizeAxes = Axes.Both,
                     Anchor = Anchor.BottomCentre,
                     Origin = Anchor.BottomCentre,
-                    AutoSizeAxes = Axes.Both,
-                    Spacing = new Vector2(94, 0),
-                    Y = -70
+                    Child = drawableHand = new FillFlowContainer<DrawableCard>
+                    {
+                        AutoSizeAxes = Axes.Both,
+                        Direction = FillDirection.Horizontal
+                    }
                 },
                 new FillFlowContainer
                 {
@@ -59,20 +64,20 @@ namespace SushiStop.Game.Screens
                     Y = 70,
                     Children = new Drawable[]
                     {
-                        new BasicButton
+                        chopsticksButton = new BasicButton
                         {
                             Text = "Use chopsticks!",
                             Width = 160,
                             Height = 40,
-                            BackgroundColour = Color4.DarkBlue,
+                            BackgroundColour = Color4.MediumBlue,
                             Action = useChopsticks
                         },
-                        new BasicButton
+                        sendButton = new BasicButton
                         {
                             Text = "Send!",
                             Width = 80,
                             Height = 40,
-                            BackgroundColour = Color4.DarkBlue,
+                            BackgroundColour = Color4.MediumBlue,
                             Action = confirmCardSelection
                         }
                     }
@@ -119,16 +124,16 @@ namespace SushiStop.Game.Screens
         {
             selectedCards.Clear();
             selectedCardsLimit = 1;
-            canUseChopsticks = true;
-            canSendCards = true;
+            enableChopsticksButton(true);
+            enableSendButton(true);
         }
 
         private void useChopsticks()
         {
             if (canUseChopsticks) // TODO: also check that the player also has chopsticks,
-                                  // then remove it from played cards
+                                  // then remove it from Player.PlayedCards
             {
-                canUseChopsticks = false;
+                enableChopsticksButton(false);
                 selectedCardsLimit = 2;
             }
         }
@@ -138,12 +143,12 @@ namespace SushiStop.Game.Screens
             if (!canSendCards)
                 return;
 
-            // This enforces that you send at one card, or if you used chopsticks,
-            // you must send two
+            // This enforces that you send at one card, or if you used chopsticks, you must send two
             if (selectedCards.Count < 1 || (selectedCards.Count < 2 && !canUseChopsticks))
                 return;
 
-            canSendCards = false;
+            enableChopsticksButton(false);
+            enableSendButton(false);
 
             foreach (DrawableCard selectedCard in selectedCards)
             {
@@ -159,6 +164,34 @@ namespace SushiStop.Game.Screens
             }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
 
             // TODO: "waiting for other players" or something
+        }
+
+        private void enableChopsticksButton(bool enable)
+        {
+            if (enable)
+            {
+                canUseChopsticks = true;
+                Schedule(() => chopsticksButton.BackgroundColour = Color4.MediumBlue);
+            }
+            else
+            {
+                canUseChopsticks = false;
+                Schedule(() => chopsticksButton.BackgroundColour = Color4.Red);
+            }
+        }
+
+        private void enableSendButton(bool enable)
+        {
+            if (enable)
+            {
+                canSendCards = true;
+                Schedule(() => sendButton.BackgroundColour = Color4.MediumBlue);
+            }
+            else
+            {
+                canSendCards = false;
+                Schedule(() => sendButton.BackgroundColour = Color4.Red);
+            }
         }
     }
 }
