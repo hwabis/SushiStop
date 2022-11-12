@@ -13,6 +13,8 @@ namespace SushiStop.Server
 
         // Used for filtering out the duplicate RoundStartRequests that call ResetForNewRound() too many times 
         public int StartRoundRequestCount = 0;
+        // Used for knowing when all players are done (EndTurnCount % [number of players] == 0)
+        public int EndTurnCount = 0;
 
         public SushiStopServer(IPAddress address, int port)
             : base(address, port)

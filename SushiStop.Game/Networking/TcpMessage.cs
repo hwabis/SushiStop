@@ -19,7 +19,6 @@ namespace SushiStop.Game.Networking
 
         // Server messages Startround and NextTurn sets this
         // (client needs to see every Player to see their PlayedCards)
-        // TODO: make it so only the intended recepients can see their hands
         public List<Player> Players;
     }
 

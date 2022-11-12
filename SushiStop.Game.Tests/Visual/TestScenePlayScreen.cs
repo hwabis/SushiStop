@@ -47,9 +47,9 @@ namespace SushiStop.Game.Tests.Visual
                     PlayedCards = new List<Card>()
                     {
                         new WasabiCard(),
-                        new NigiriCard(3),
-                        new MakiRollCard(2),
                         new ChopsticksCard(),
+                        new NigiriCard(3),
+                        new MakiRollCard(2)
                     }
                 },
                 new Player

@@ -61,7 +61,7 @@ namespace SushiStop.Game.Screens
                     Direction = FillDirection.Horizontal,
                     // Why do I need these...
                     Spacing = new Vector2(54, 0),
-                    Y = 46
+                    Y = 24
                 },
                 drawableHand = new FillFlowContainer<DrawableCard>
                 {
@@ -81,7 +81,7 @@ namespace SushiStop.Game.Screens
                         chopsticksButton = new BasicButton
                         {
                             Text = "Use gem!",
-                            Width = 160,
+                            Width = 120,
                             Height = 40,
                             BackgroundColour = Color4.MediumBlue,
                             Action = useChopsticks
@@ -89,10 +89,10 @@ namespace SushiStop.Game.Screens
                         endTurnButton = new BasicButton
                         {
                             Text = "End turn!",
-                            Width = 80,
+                            Width = 120,
                             Height = 40,
                             BackgroundColour = Color4.MediumBlue,
-                            Action = confirmCardSelection
+                            Action = endTurn
                         }
                     }
                 }
@@ -191,12 +191,13 @@ namespace SushiStop.Game.Screens
                 Player.Hand.Add(chopsticksCard);
 
                 CreateDrawablePlayedCards();
+                // Don't do CreateDrawableHand(), because we don't want the player to re-play it
                 enableChopsticksButton(false);
                 selectedCardsLimit = 2;
             }
         }
 
-        private void confirmCardSelection()
+        private void endTurn()
         {
             if (!canEndTurn)
                 return;
@@ -220,8 +221,6 @@ namespace SushiStop.Game.Screens
                 Type = TcpMessageType.EndTurn,
                 Player = Player
             }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
-
-            // TODO: "waiting for other players" or something
         }
 
         private void enableChopsticksButton(bool enable)

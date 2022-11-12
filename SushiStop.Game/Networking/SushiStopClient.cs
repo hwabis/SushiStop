@@ -59,6 +59,18 @@ namespace SushiStop.Game.Networking
                     break;
                 }
 
+                case TcpMessageType.NextTurn:
+                {
+                    if (screenStack.CurrentScreen is PlayScreen playScreen)
+                    {
+                        playScreen.Players = message.Players;
+                        playScreen.ResetForNewTurn();
+                        playScreen.CreateDrawablePlayedCards();
+                        playScreen.CreateDrawableHand();
+                    }
+                    break;
+                }
+
                 default:
                     Logger.Log($"Received a message with an invalid type");
                     break;

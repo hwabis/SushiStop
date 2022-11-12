@@ -3,14 +3,12 @@ using System.Text;
 using NetCoreServer;
 using Newtonsoft.Json;
 using SushiStop.Game;
-using SushiStop.Game.Cards;
 using SushiStop.Game.Networking;
 
 namespace SushiStop.Server
 {
     public class SushiStopSession : TcpSession
     {
-        // This player is the same one as referenced in server.Players (after OnConnected)
         private Player player = new Player();
 
         private SushiStopServer server;
@@ -36,7 +34,6 @@ namespace SushiStop.Server
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
             string messageString = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
-            Console.WriteLine("Incoming: " + messageString);
 
             TcpMessage? message = JsonConvert.DeserializeObject<TcpMessage>(messageString,
                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
@@ -120,7 +117,22 @@ namespace SushiStop.Server
                     break;
 
                 case TcpMessageType.EndTurn:
-                    // TODO
+                    server.EndTurnCount++;
+
+                    var index = server.Players.FindIndex(p => p.Number == player.Number);
+                    player = message.Player; // There's actually no point in tracking player anymore...
+                    server.Players[index] = message.Player;
+
+                    if (server.EndTurnCount % server.Players.Count == 0)
+                    {
+                        Console.WriteLine("Next turn!");
+                        server.Multicast(JsonConvert.SerializeObject(new TcpMessage
+                        {
+                            Type = TcpMessageType.NextTurn,
+                            Players = server.Players
+                        }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
+                    }
+
                     break;
 
                 default:
