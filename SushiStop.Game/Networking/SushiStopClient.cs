@@ -23,7 +23,6 @@ namespace SushiStop.Game.Networking
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
             string messageString = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
-            Logger.Log("Incoming: " + messageString);
 
             TcpMessage message = JsonConvert.DeserializeObject<TcpMessage>(messageString,
                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
@@ -43,19 +42,6 @@ namespace SushiStop.Game.Networking
                 {
                     if (screenStack.CurrentScreen is LobbyScreen lobbyScreen)
                         lobbyScreen.GoToPlayScreen();
-                    break;
-                }
-
-                case TcpMessageType.StartRound:
-                {
-                    if (screenStack.CurrentScreen is PlayScreen playScreen)
-                    {
-                        playScreen.Players = message.Players;
-                        Logger.Log($"Received hand with {playScreen.Player.Hand.Count} cards");
-                        playScreen.ResetForNewTurn();
-                        playScreen.CreateDrawablePlayedCards();
-                        playScreen.CreateDrawableHand();
-                    }
                     break;
                 }
 

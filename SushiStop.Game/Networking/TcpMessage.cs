@@ -17,33 +17,32 @@ namespace SushiStop.Game.Networking
         // Client message EndTurn sets this
         public Player Player;
 
-        // Server messages Startround and NextTurn sets this
-        // (client needs to see every Player to see their PlayedCards)
+        // Server message NextTurn sets this
         public List<Player> Players;
     }
 
     public enum TcpMessageType
     {
-        // Client is requesting their player number
+        // Client is requesting their player number. This sends nothing else
         PlayerNumberRequest,
-        // Server is giving the client their player number
+        // Server is sending the client their player number
         PlayerNumber,
 
-        // Client is requesting to start game (round 1)
+        // Client is requesting to start game (round 1). This sends nothing else
         StartGameRequest,
-        // Server tells everyone to go to play screen
+        // Server tells everyone to go to play screen. This sends nothing else
         StartGame,
 
-        // Client starts a round. Three rounds per game. The client expects their new starting hand
+        // Client starts a round. This sends nothing else
+        // (Three rounds per game.
+        // The client expects their new starting hand by expecting NextTurn from Server)
         StartRoundRequest,
-        // Set up and give starting hands to everyone
-        StartRound,
 
         // Client played a card from their hand (or two for chopsticks),
         // and sends their Player instance object to the server
         EndTurn,
-        // All players have played a card. Server sends everybody a list of every Player
-        // (1. their new hands and 2. the updated list of played cards of every player)
+        // All players have played a card. Server sends this to everybody and a list of every Player
+        // (giving 1. their new hands and 2. the updated list of played cards of every player)
         NextTurn
     }
 }

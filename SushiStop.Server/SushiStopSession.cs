@@ -111,7 +111,7 @@ namespace SushiStop.Server
                     Console.WriteLine($"Sending starting hand of {player.Hand.Count} cards");
                     Send(JsonConvert.SerializeObject(new TcpMessage
                     {
-                        Type = TcpMessageType.StartRound,
+                        Type = TcpMessageType.NextTurn,
                         Players = server.Players
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
                     break;
@@ -119,13 +119,14 @@ namespace SushiStop.Server
                 case TcpMessageType.EndTurn:
                     server.EndTurnCount++;
 
-                    var index = server.Players.FindIndex(p => p.Number == player.Number);
+                    int index = server.Players.FindIndex(p => p.Number == player.Number);
                     player = message.Player; // There's actually no point in tracking player anymore...
                     server.Players[index] = message.Player;
 
                     if (server.EndTurnCount % server.Players.Count == 0)
                     {
                         Console.WriteLine("Next turn!");
+                        server.RotateHands();
                         server.Multicast(JsonConvert.SerializeObject(new TcpMessage
                         {
                             Type = TcpMessageType.NextTurn,
