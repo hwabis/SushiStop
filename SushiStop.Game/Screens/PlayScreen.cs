@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Screens;
@@ -53,6 +54,11 @@ namespace SushiStop.Game.Screens
         {
             InternalChildren = new Drawable[]
             {
+                new Box
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Color4.Beige
+                },
                 playedCards = new FillFlowContainer<FillFlowContainer>
                 {
                     AutoSizeAxes = Axes.Both,
@@ -137,7 +143,8 @@ namespace SushiStop.Game.Screens
                     {
                         Text = $"P{player.Number}: ",
                         Origin = Anchor.BottomCentre,
-                        Font = FontUsage.Default.With(size: 20)
+                        Font = FontUsage.Default.With(size: 20),
+                        Colour = Color4.Brown
                     });
                     if (player.Number == playerNumber)
                         pText.Text = $"YOU ARE P{player.Number}: ";

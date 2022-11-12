@@ -21,7 +21,7 @@ namespace SushiStop.Game.Cards.Drawables
             CornerRadius = 5;
             Height = height;
             Width = width;
-            BorderColour = Color4.White;
+            BorderColour = Color4.Brown;
             BorderThickness = 2;
 
             this.color = color;
