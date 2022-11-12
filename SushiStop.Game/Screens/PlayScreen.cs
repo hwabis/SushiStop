@@ -196,7 +196,7 @@ namespace SushiStop.Game.Screens
         private void useChopsticks()
         {
             Card chopsticksCard = Player.PlayedCards.FirstOrDefault(card => card is ChopsticksCard);
-            if (canUseChopsticks && chopsticksCard != null)
+            if (canUseChopsticks && chopsticksCard != null && Player.Hand.Count > 1)
             {
                 Player.PlayedCards.Remove(chopsticksCard);
                 Player.Hand.Add(chopsticksCard);
