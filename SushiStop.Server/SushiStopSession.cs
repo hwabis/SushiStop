@@ -99,11 +99,14 @@ namespace SushiStop.Server
                             return;
                     }
 
-                    for (int i = 0; i < numberOfStartingCards; i++)
-                        player.Hand.Add(server.Deck.DrawRandomCard());
+                    foreach (Player player in server.Players)
+                    {
+                        for (int i = 0; i < numberOfStartingCards; i++)
+                            player.Hand.Add(server.Deck.DrawRandomCard());
+                    }
 
-                    Console.WriteLine($"Sending starting hand of {player.Hand.Count} cards");
-                    Send(JsonConvert.SerializeObject(new TcpMessage
+                    Console.WriteLine($"Sending starting hands of {player.Hand.Count} cards");
+                    server.Multicast(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.NextTurn,
                         Players = server.Players
