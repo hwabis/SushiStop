@@ -14,8 +14,6 @@ namespace SushiStop.Server
         public List<Player> Players = new List<Player>();
         public CardDeck Deck = new CardDeck();
 
-        // Used for filtering out the duplicate RoundStartRequests that call ResetForNewRound() too many times 
-        public int StartRoundRequestCount = 0;
         // Used for knowing when all players are done (EndTurnCount % [number of players] == 0)
         public int EndTurnCount = 0;
 

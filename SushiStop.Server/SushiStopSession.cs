@@ -76,14 +76,8 @@ namespace SushiStop.Server
 
                 case TcpMessageType.StartRoundRequest:
                     Console.WriteLine($"Starting round");
-                    // We only want to reset for every [number of players] StartRoundRequests
-                    // (because every player will send a StartRoundRequest)
-                    if (server.StartRoundRequestCount % server.Players.Count == 0)
-                    {
-                        Console.WriteLine("Resetting deck!");
-                        server.ResetForNewRound();
-                    }
-                    server.StartRoundRequestCount++;
+
+                    server.ResetForNewRound();
 
                     int numberOfStartingCards;
                     switch (server.Players.Count)

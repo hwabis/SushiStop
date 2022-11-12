@@ -104,10 +104,14 @@ namespace SushiStop.Game.Screens
             base.LoadComplete();
 
             // Client may be null when we passed it as null in the constructor (FOR TEST SCENE PURPOSES ONLY)
-            client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
+            // Only have player 1 send the StartRoundRequest
+            if (playerNumber == 1)
             {
-                Type = TcpMessageType.StartRoundRequest
-            }));
+                client?.SendAsync(JsonConvert.SerializeObject(new TcpMessage
+                {
+                    Type = TcpMessageType.StartRoundRequest
+                }));
+            }
         }
 
         public void CreateDrawablePlayedCards()
