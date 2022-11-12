@@ -16,7 +16,10 @@ namespace SushiStop.Game.Screens
     // TODO: client should call ResetForNewTurn() when NextTurn is received
     public class PlayScreen : Screen
     {
-        public Player Player { get; set; } = new Player();
+        public List<Player> Players { get; set; }
+        private int playerNumber;
+
+        public Player Player => Players[playerNumber - 1];
 
         private FillFlowContainer<DrawableCard> drawableHand;
         private List<DrawableCard> selectedCards = new List<DrawableCard>();
@@ -37,7 +40,7 @@ namespace SushiStop.Game.Screens
         public PlayScreen(SushiStopClient client, int playerNumber)
         {
             this.client = client;
-            Player.Number = playerNumber;
+            this.playerNumber = playerNumber;
         }
 
         [BackgroundDependencyLoader]
@@ -132,7 +135,7 @@ namespace SushiStop.Game.Screens
         private void useChopsticks()
         {
             if (canUseChopsticks) // TODO: also check that the player also has chopsticks,
-                                  // then remove it from Player.PlayedCards
+                                  // then remove it from Player.PlayedCards and add it to Player.Hand
             {
                 enableChopsticksButton(false);
                 selectedCardsLimit = 2;

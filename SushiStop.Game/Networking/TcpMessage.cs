@@ -7,21 +7,18 @@ namespace SushiStop.Game.Networking
     /// The client and the server communicate by sending a JSON serialized string of
     /// an instance of this class and checks TcpMessage.Type on both ends
     /// </summary>
-    public class TcpMessage
+    public sealed class TcpMessage
     {
         public TcpMessageType Type;
 
         // Server message PlayerNumber sets this
         public int PlayerNumber;
 
-        // Server message StartRound sets this (we don't have to all players because we know
-        // at the start of a round, Player.PlayedCards will be empty)
-        public List<Card> StartingHand;
-
         // Client message EndTurn sets this
         public Player Player;
 
-        // Server message NextTurn sets this
+        // Server messages Startround and NextTurn sets this
+        // (client needs to see every Player to see their PlayedCards)
         // TODO: make it so only the intended recepients can see their hands
         public List<Player> Players;
     }

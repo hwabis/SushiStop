@@ -10,6 +10,7 @@ namespace SushiStop.Server
 {
     public class SushiStopSession : TcpSession
     {
+        // This player is the same one as referenced in server.Players (after OnConnected)
         private Player player = new Player();
 
         private SushiStopServer server;
@@ -23,6 +24,7 @@ namespace SushiStop.Server
         {
             Console.WriteLine($"TCP session with Id {Id} connected!");
             server.Players.Add(player = new Player());
+            // Assign player a Number when PlayerNumberRequest
         }
 
         protected override void OnDisconnected()
@@ -77,7 +79,8 @@ namespace SushiStop.Server
 
                 case TcpMessageType.StartRoundRequest:
                     Console.WriteLine($"Starting round");
-                    // We only want to reset for every [number of players] StartRoundRequests.
+                    // We only want to reset for every [number of players] StartRoundRequests
+                    // (because every player will send a StartRoundRequest)
                     if (server.StartRoundRequestCount % server.Players.Count == 0)
                     {
                         Console.WriteLine("Resetting deck!");
@@ -105,17 +108,14 @@ namespace SushiStop.Server
                             return;
                     }
 
-                    List<Card> startingHand = new List<Card>();
                     for (int i = 0; i < numberOfStartingCards; i++)
-                        startingHand.Add(server.Deck.DrawRandomCard());
-
-                    player.Hand = startingHand;
+                        player.Hand.Add(server.Deck.DrawRandomCard());
 
                     Console.WriteLine($"Sending starting hand of {player.Hand.Count} cards");
                     Send(JsonConvert.SerializeObject(new TcpMessage
                     {
                         Type = TcpMessageType.StartRound,
-                        StartingHand = startingHand
+                        Players = server.Players
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
                     break;
 

@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using NetCoreServer;
 using SushiStop.Game;
+using SushiStop.Game.Cards;
 
 namespace SushiStop.Server
 {
@@ -32,10 +33,13 @@ namespace SushiStop.Server
         {
             foreach (Player player in Players)
             {
-                player.Hand.Clear(); // Hand should already be clear but let's make sure
-                player.PlayedCards.Clear();
+                // We clear out all PlayedCards and put them into server.Deck, EXCEPT we leave the puddings
+                foreach (Card card in player.PlayedCards)
+                {
+                    if (card is not PuddingCard)
+                        Deck.AddCard(card);
+                }
             }
-            Deck.Reset();
         }
     }
 }

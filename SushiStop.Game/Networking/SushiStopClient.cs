@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
+using osu.Framework.Threading;
 using SushiStop.Game.Screens;
 using Logger = osu.Framework.Logging.Logger;
 using TcpClient = NetCoreServer.TcpClient;
@@ -49,10 +50,9 @@ namespace SushiStop.Game.Networking
                 {
                     if (screenStack.CurrentScreen is PlayScreen playScreen)
                     {
-                        Logger.Log($"Received hand with {message.StartingHand.Count} cards");
+                        playScreen.Players = message.Players;
+                        Logger.Log($"Received hand with {playScreen.Player.Hand.Count} cards");
                         playScreen.ResetForNewTurn();
-                        playScreen.Player.Hand = message.StartingHand;
-                        playScreen.Player.PlayedCards.Clear();
                         playScreen.CreateDrawableHand();
                     }
                     break;

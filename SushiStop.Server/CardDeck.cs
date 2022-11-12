@@ -9,18 +9,6 @@ namespace SushiStop.Server
 
         public CardDeck()
         {
-            Reset();
-        }
-
-        public Card DrawRandomCard()
-        {
-            Card topCard = deck[random.Next(deck.Count)];
-            deck.Remove(topCard);
-            return topCard;
-        }
-
-        public void Reset()
-        {
             for (int i = 0; i < 14; i++)
                 deck.Add(new TempuraCard());
             for (int i = 0; i < 14; i++)
@@ -45,6 +33,18 @@ namespace SushiStop.Server
                 deck.Add(new WasabiCard());
             for (int i = 0; i < 4; i++)
                 deck.Add(new ChopsticksCard());
+        }
+
+        public void AddCard(Card card)
+        {
+            deck.Add(card);
+        }
+
+        public Card DrawRandomCard()
+        {
+            Card topCard = deck[random.Next(deck.Count)];
+            deck.Remove(topCard);
+            return topCard;
         }
     }
 }
