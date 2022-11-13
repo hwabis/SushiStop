@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using Newtonsoft.Json;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -342,8 +341,8 @@ namespace SushiStop.Game.Screens
                         case DumplingCard:
                             dumplingCount++;
                             break;
-                        case MakiRollCard:
-                            makiRollCount[i]++;
+                        case MakiRollCard makiRollCard:
+                            makiRollCount[i] += makiRollCard.Count;
                             break;
                         case WasabiCard:
                             wasabiActivated = true;
@@ -381,7 +380,50 @@ namespace SushiStop.Game.Screens
                         break;
                 }
             }
-            // TODO: then we calculate the maki scores
+
+            // Calculate the maki scores
+            // Wow it's another leetcode problem
+            int maxMakiRollCount = 0;
+            for (int i = 0; i < makiRollCount.Length; i++)
+            {
+                if (makiRollCount[i] > maxMakiRollCount)
+                    maxMakiRollCount = makiRollCount[i];
+            }
+            if (maxMakiRollCount > 0)
+            {
+                List<int> indicesWithMaxMakiCount = new List<int>();
+                for (int i = 0; i < makiRollCount.Length; i++)
+                {
+                    if (makiRollCount[i] == maxMakiRollCount)
+                        indicesWithMaxMakiCount.Add(i);
+                }
+                // Split the 6 amongst all the winners
+                foreach (int index in indicesWithMaxMakiCount)
+                    scores[index] += 6 / indicesWithMaxMakiCount.Count;
+
+                if (indicesWithMaxMakiCount.Count == 1)
+                {
+                    // There was no tie for first, so let's calculate second place
+                    int secondMaxMakiRollCount = 0;
+                    for (int i = 0; i < makiRollCount.Length; i++)
+                    {
+                        if (makiRollCount[i] > secondMaxMakiRollCount
+                            && makiRollCount[i] < maxMakiRollCount)
+                            secondMaxMakiRollCount = makiRollCount[i];
+                    }
+                    if (secondMaxMakiRollCount > 0)
+                    {
+                        List<int> indicesWithSecondMaxMakiCount = new List<int>();
+                        for (int i = 0; i < makiRollCount.Length; i++)
+                        {
+                            if (makiRollCount[i] == secondMaxMakiRollCount)
+                                indicesWithSecondMaxMakiCount.Add(i);
+                        }
+                        foreach (int index in indicesWithSecondMaxMakiCount)
+                            scores[index] += 3 / indicesWithSecondMaxMakiCount.Count;
+                    }
+                }
+            }
 
             // TODO: then the pudding scores, if finalRound
 
