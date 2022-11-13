@@ -6,7 +6,6 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
-using osuTK;
 using osuTK.Graphics;
 using SushiStop.Game.Networking;
 
@@ -20,9 +19,9 @@ namespace SushiStop.Game.Screens
         private TextBox portTextBox;
         private BasicButton connectButton;
 
-        private const int connectButtonWidth = 100;
-        private const int connectButtonHeight = 50;
-        private const string connectButtonText = "Connect!";
+        private const int connect_button_width = 100;
+        private const int connect_button_height = 50;
+        private const string connect_button_text = "Connect!";
 
         [BackgroundDependencyLoader]
         private void load(ScreenStack screenStack)
@@ -64,11 +63,11 @@ namespace SushiStop.Game.Screens
                         },
                         connectButton = new BasicButton
                         {
-                            Text = connectButtonText,
+                            Text = connect_button_text,
                             Anchor = Anchor.TopCentre,
                             Origin = Anchor.TopCentre,
-                            Width = connectButtonWidth,
-                            Height = connectButtonHeight,
+                            Width = connect_button_width,
+                            Height = connect_button_height,
                             BackgroundColour = Color4.DarkBlue,
                             Action = connectToServer,
                             Margin = new MarginPadding(5)
@@ -84,7 +83,7 @@ namespace SushiStop.Game.Screens
         {
             base.OnResuming(e);
 
-            enableConnectButton(true);
+            Schedule(() => connectButton.Show());
         }
 
         private void connectToServer()
@@ -108,28 +107,12 @@ namespace SushiStop.Game.Screens
             // I need to await this so that we don't accidentally connect after we've already
             // send a PlayerNumberRequest, but I can't. So, this is a (terrible) solution for now.
 
-            enableConnectButton(false);
+            connectButton.Hide();
             client.ConnectAsync();
             Scheduler.AddDelayed(() =>
             {
                 screenStack.Push(new LobbyScreen(client));
             }, 1000);
-        }
-
-        private void enableConnectButton(bool enable)
-        {
-            if (enable)
-            {
-                connectButton.Width = connectButtonWidth;
-                connectButton.Height = connectButtonHeight;
-                connectButton.Text = connectButtonText;
-            }
-            else
-            {
-                connectButton.Width = 0;
-                connectButton.Height = 0;
-                connectButton.Text = "";
-            }
         }
     }
 }

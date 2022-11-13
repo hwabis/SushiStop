@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using Newtonsoft.Json;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
@@ -16,7 +17,6 @@ using SushiStop.Game.Networking;
 
 namespace SushiStop.Game.Screens
 {
-    // TODO: client should call ResetForNewTurn() when NextTurn is received
     public class PlayScreen : Screen
     {
         public List<Player> Players { get; set; }
@@ -40,6 +40,9 @@ namespace SushiStop.Game.Screens
         private bool canUseChopsticks = true;
         // Is disabled after sending cards to the server to prevent spam clicking
         private bool canEndTurn = true;
+
+        private SpriteText scoresText;
+        private BasicButton startNewRoundButton;
 
         private SushiStopClient client;
 
@@ -101,6 +104,30 @@ namespace SushiStop.Game.Screens
                             Action = endTurn
                         }
                     }
+                },
+                scoresText = new SpriteText
+                {
+                    Anchor = Anchor.BottomCentre,
+                    Origin = Anchor.BottomCentre,
+                    Font = FontUsage.Default.With(size: 40),
+                    Colour = Color4.Brown
+                },
+                startNewRoundButton = new BasicButton
+                {
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
+                    Text = "Ready for next round!",
+                    Width = 180,
+                    Height = 40,
+                    Y = 160,
+                    BackgroundColour = Color4.MediumBlue,
+                    Action = (() =>
+                    {
+                        client.SendAsync(JsonConvert.SerializeObject(new TcpMessage
+                        {
+                            Type = TcpMessageType.StartRoundRequest
+                        }));
+                    })
                 }
             };
         }
@@ -108,6 +135,9 @@ namespace SushiStop.Game.Screens
         protected override void LoadComplete()
         {
             base.LoadComplete();
+
+            scoresText.Hide();
+            startNewRoundButton.Hide();
 
             // Client may be null when we passed it as null in the constructor (FOR TEST SCENE PURPOSES ONLY)
             // Only have player 1 send the StartRoundRequest
@@ -193,6 +223,29 @@ namespace SushiStop.Game.Screens
             enableEndTurnButton(true);
         }
 
+        public void ShowScoresAndNewRoundButton(bool show)
+        {
+            Schedule(() =>
+            {
+                if (!show)
+                {
+                    scoresText.Hide();
+                    startNewRoundButton.Hide();
+                    return;
+                }
+
+                scoresText.Show();
+                // TODO: don't show new round button if 3 rounds have passed
+                startNewRoundButton.Show();
+
+                // TODO: set final round if it's final round
+                int[] scores = calculateScores(Players, false);
+                scoresText.Text = $"Scores: ";
+                for (int i = 0; i < scores.Length; i++)
+                    scoresText.Text += $"P{i + 1} - {scores[i]}, ";
+            });
+        }
+
         private void useChopsticks()
         {
             Card chopsticksCard = Player.PlayedCards.FirstOrDefault(card => card is ChopsticksCard);
@@ -260,6 +313,79 @@ namespace SushiStop.Game.Screens
                 canEndTurn = false;
                 Schedule(() => endTurnButton.BackgroundColour = Color4.Red);
             }
+        }
+
+        // index 0 of the return is score for player 1, ...
+        private int[] calculateScores(List<Player> players, bool finalRound)
+        {
+            int[] scores = new int[players.Count];
+            // First, let's calculate the independent scores, and get the count of Maki and Pudding along the way
+            int[] makiRollCount = new int[players.Count];
+            int[] puddingCount = new int[players.Count];
+            for (int i = 0; i < players.Count; i++)
+            {
+                int tempuraCount = 0;
+                int sashimiCount = 0;
+                int dumplingCount = 0;
+                bool wasabiActivated = false;
+                int nigiriScore = 0;
+                foreach (Card card in players[i].PlayedCards)
+                {
+                    switch (card)
+                    {
+                        case TempuraCard:
+                            tempuraCount++;
+                            break;
+                        case SashimiCard:
+                            sashimiCount++;
+                            break;
+                        case DumplingCard:
+                            dumplingCount++;
+                            break;
+                        case MakiRollCard:
+                            makiRollCount[i]++;
+                            break;
+                        case WasabiCard:
+                            wasabiActivated = true;
+                            break;
+                        case NigiriCard nigiriCard:
+                            nigiriScore += wasabiActivated ? nigiriCard.Value * 3 : nigiriCard.Value;
+                            wasabiActivated = false;
+                            break;
+                        case PuddingCard:
+                            puddingCount[i]++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                scores[i] += (tempuraCount / 2) * 5 + (sashimiCount / 3) * 10 + nigiriScore;
+                switch (dumplingCount)
+                {
+                    case int count when count >= 5:
+                        scores[i] += 15;
+                        break;
+                    case 4:
+                        scores[i] += 10;
+                        break;
+                    case 3:
+                        scores[i] += 6;
+                        break;
+                    case 2:
+                        scores[i] += 3;
+                        break;
+                    case 1:
+                        scores[i] += 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            // TODO: then we calculate the maki scores
+
+            // TODO: then the pudding scores, if finalRound
+
+            return scores;
         }
     }
 }

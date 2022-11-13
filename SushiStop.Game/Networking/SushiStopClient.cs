@@ -49,6 +49,11 @@ namespace SushiStop.Game.Networking
                 {
                     if (screenStack.CurrentScreen is PlayScreen playScreen)
                     {
+                        if (message.Players[0].Hand.Count == 0)
+                            playScreen.ShowScoresAndNewRoundButton(true);
+                        else
+                            playScreen.ShowScoresAndNewRoundButton(false);
+
                         playScreen.Players = message.Players;
                         playScreen.ResetForNewTurn();
                         playScreen.CreateDrawablePlayedCards();

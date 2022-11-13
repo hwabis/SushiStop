@@ -37,10 +37,13 @@ namespace SushiStop.Server
             foreach (Player player in Players)
             {
                 // We clear out all PlayedCards and put them into server.Deck, EXCEPT we leave the puddings
-                foreach (Card card in player.PlayedCards)
+                foreach (Card card in player.PlayedCards.ToList())
                 {
                     if (card is not PuddingCard)
+                    {
+                        player.PlayedCards.Remove(card);
                         Deck.AddCard(card);
+                    }
                 }
             }
         }
