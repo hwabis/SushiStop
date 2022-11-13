@@ -43,6 +43,9 @@ namespace SushiStop.Game.Screens
         private SpriteText scoresText;
         private BasicButton startNewRoundButton;
 
+        // Once we've completed 2 rounds, then we know the next one is our last one
+        private int completedRoundCount;
+
         private SushiStopClient client;
 
         public PlayScreen(SushiStopClient client, int playerNumber)
@@ -233,12 +236,14 @@ namespace SushiStop.Game.Screens
                     return;
                 }
 
-                scoresText.Show();
-                // TODO: don't show new round button if 3 rounds have passed
-                startNewRoundButton.Show();
+                completedRoundCount++;
 
-                // TODO: set final round if it's final round
-                int[] scores = calculateScores(Players, false);
+                scoresText.Show();
+                if (completedRoundCount < 3)
+                    startNewRoundButton.Show();
+
+                // TODO: players have to remember their score from each round lol
+                int[] scores = calculateScores(Players, completedRoundCount >= 3);
                 scoresText.Text = $"Scores: ";
                 for (int i = 0; i < scores.Length; i++)
                     scoresText.Text += $"P{i + 1} - {scores[i]}, ";
@@ -315,12 +320,13 @@ namespace SushiStop.Game.Screens
         }
 
         // index 0 of the return is score for player 1, ...
+        // This is score per round, and with finalRound, this also accounts for pudding   
         private int[] calculateScores(List<Player> players, bool finalRound)
         {
             int[] scores = new int[players.Count];
             // First, let's calculate the independent scores, and get the count of Maki and Pudding along the way
-            int[] makiRollCount = new int[players.Count];
-            int[] puddingCount = new int[players.Count];
+            int[] makiRollCounts = new int[players.Count];
+            int[] puddingCounts = new int[players.Count];
             for (int i = 0; i < players.Count; i++)
             {
                 int tempuraCount = 0;
@@ -342,7 +348,7 @@ namespace SushiStop.Game.Screens
                             dumplingCount++;
                             break;
                         case MakiRollCard makiRollCard:
-                            makiRollCount[i] += makiRollCard.Count;
+                            makiRollCounts[i] += makiRollCard.Count;
                             break;
                         case WasabiCard:
                             wasabiActivated = true;
@@ -352,7 +358,7 @@ namespace SushiStop.Game.Screens
                             wasabiActivated = false;
                             break;
                         case PuddingCard:
-                            puddingCount[i]++;
+                            puddingCounts[i]++;
                             break;
                         default:
                             break;
@@ -384,17 +390,17 @@ namespace SushiStop.Game.Screens
             // Calculate the maki scores
             // Wow it's another leetcode problem
             int maxMakiRollCount = 0;
-            for (int i = 0; i < makiRollCount.Length; i++)
+            for (int i = 0; i < makiRollCounts.Length; i++)
             {
-                if (makiRollCount[i] > maxMakiRollCount)
-                    maxMakiRollCount = makiRollCount[i];
+                if (makiRollCounts[i] > maxMakiRollCount)
+                    maxMakiRollCount = makiRollCounts[i];
             }
             if (maxMakiRollCount > 0)
             {
                 List<int> indicesWithMaxMakiCount = new List<int>();
-                for (int i = 0; i < makiRollCount.Length; i++)
+                for (int i = 0; i < makiRollCounts.Length; i++)
                 {
-                    if (makiRollCount[i] == maxMakiRollCount)
+                    if (makiRollCounts[i] == maxMakiRollCount)
                         indicesWithMaxMakiCount.Add(i);
                 }
                 // Split the 6 amongst all the winners
@@ -405,18 +411,17 @@ namespace SushiStop.Game.Screens
                 {
                     // There was no tie for first, so let's calculate second place
                     int secondMaxMakiRollCount = 0;
-                    for (int i = 0; i < makiRollCount.Length; i++)
+                    for (int i = 0; i < makiRollCounts.Length; i++)
                     {
-                        if (makiRollCount[i] > secondMaxMakiRollCount
-                            && makiRollCount[i] < maxMakiRollCount)
-                            secondMaxMakiRollCount = makiRollCount[i];
+                        if (makiRollCounts[i] > secondMaxMakiRollCount && makiRollCounts[i] < maxMakiRollCount)
+                            secondMaxMakiRollCount = makiRollCounts[i];
                     }
                     if (secondMaxMakiRollCount > 0)
                     {
                         List<int> indicesWithSecondMaxMakiCount = new List<int>();
-                        for (int i = 0; i < makiRollCount.Length; i++)
+                        for (int i = 0; i < makiRollCounts.Length; i++)
                         {
-                            if (makiRollCount[i] == secondMaxMakiRollCount)
+                            if (makiRollCounts[i] == secondMaxMakiRollCount)
                                 indicesWithSecondMaxMakiCount.Add(i);
                         }
                         foreach (int index in indicesWithSecondMaxMakiCount)
@@ -425,7 +430,45 @@ namespace SushiStop.Game.Screens
                 }
             }
 
-            // TODO: then the pudding scores, if finalRound
+            if (finalRound)
+            {
+                // Calculate the pudding
+                int maxPuddingCount = 0;
+                for (int i = 0; i < puddingCounts.Length; i++)
+                {
+                    if (puddingCounts[i] > maxPuddingCount)
+                        maxPuddingCount = puddingCounts[i];
+                }
+                List<int> indicesWithMaxPuddingCount = new List<int>();
+                for (int i = 0; i < puddingCounts.Length; i++)
+                {
+                    if (puddingCounts[i] == maxPuddingCount)
+                        indicesWithMaxPuddingCount.Add(i);
+                }
+                // Split the 6 amongst all the winners
+                foreach (int index in indicesWithMaxPuddingCount)
+                    scores[index] += 6 / indicesWithMaxPuddingCount.Count;
+
+                // Only calculate loser penalty if more than 2 players
+                if (players.Count > 2)
+                {
+                    int minPuddingCount = puddingCounts[0];
+                    for (int i = 0; i < puddingCounts.Length; i++)
+                    {
+                        if (puddingCounts[i] < minPuddingCount)
+                            minPuddingCount = puddingCounts[i];
+                    }
+                    List<int> indicesWithMinPuddingCount = new List<int>();
+                    for (int i = 0; i < puddingCounts.Length; i++)
+                    {
+                        if (puddingCounts[i] == minPuddingCount)
+                            indicesWithMinPuddingCount.Add(i);
+                    }
+                    // Split the -6 amongst all the winners
+                    foreach (int index in indicesWithMinPuddingCount)
+                        scores[index] -= 6 / indicesWithMinPuddingCount.Count;
+                }
+            }
 
             return scores;
         }
