@@ -45,6 +45,9 @@ namespace SushiStop.Game.Screens
 
         // Once we've completed 2 rounds, then we know the next one is our last one
         private int completedRoundCount;
+        // TotalScores[0] is the total score of the player 1, ...
+        // This is updated at the end of every round
+        public int[] TotalScores;
 
         private SushiStopClient client;
 
@@ -242,11 +245,13 @@ namespace SushiStop.Game.Screens
                 if (completedRoundCount < 3)
                     startNewRoundButton.Show();
 
-                // TODO: players have to remember their score from each round lol
                 int[] scores = calculateScores(Players, completedRoundCount >= 3);
-                scoresText.Text = $"Scores: ";
                 for (int i = 0; i < scores.Length; i++)
-                    scoresText.Text += $"P{i + 1} - {scores[i]}, ";
+                    TotalScores[i] += scores[i];
+
+                scoresText.Text = "";
+                for (int i = 0; i < scores.Length; i++)
+                    scoresText.Text += $"P{i + 1}:{scores[i]}-Total:{TotalScores[i]}, ";
             });
         }
 

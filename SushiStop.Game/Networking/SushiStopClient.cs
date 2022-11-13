@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Commons.Music.Midi;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
 using osu.Framework.Threading;
@@ -55,6 +56,9 @@ namespace SushiStop.Game.Networking
                             playScreen.ShowScoresAndNewRoundButton(false);
 
                         playScreen.Players = message.Players;
+                        // Only initialize TotalScores at the first time this is received
+                        playScreen.TotalScores ??= new int[message.Players.Count];
+
                         playScreen.ResetForNewTurn();
                         playScreen.CreateDrawablePlayedCards();
                         playScreen.CreateDrawableHand();
