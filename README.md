@@ -1,5 +1,3 @@
-this game is very buggy
-
 # SushiStop
 Clone of the card game Sushi Go! Check out the original rules [here](https://www.fgbradleys.com/rules/rules2/SushiGo-rules.pdf).
 
