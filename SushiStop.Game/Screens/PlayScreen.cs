@@ -337,7 +337,7 @@ namespace SushiStop.Game.Screens
                 int tempuraCount = 0;
                 int sashimiCount = 0;
                 int dumplingCount = 0;
-                bool wasabiActivated = false;
+                int wasabisAvailable = 0;
                 int nigiriScore = 0;
                 foreach (Card card in players[i].PlayedCards)
                 {
@@ -356,11 +356,17 @@ namespace SushiStop.Game.Screens
                             makiRollCounts[i] += makiRollCard.Count;
                             break;
                         case WasabiCard:
-                            wasabiActivated = true;
+                            wasabisAvailable++;
                             break;
                         case NigiriCard nigiriCard:
-                            nigiriScore += wasabiActivated ? nigiriCard.Value * 3 : nigiriCard.Value;
-                            wasabiActivated = false;
+                            if (wasabisAvailable > 0)
+                            {
+                                wasabisAvailable--;
+                                nigiriScore += nigiriCard.Value * 3;
+                            }
+                            else
+                                nigiriScore += nigiriCard.Value;
+
                             break;
                         case PuddingCard:
                             puddingCounts[i]++;
