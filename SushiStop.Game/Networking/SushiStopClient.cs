@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using osu.Framework.Screens;
 using SushiStop.Game.Screens;
@@ -13,6 +15,8 @@ namespace SushiStop.Game.Networking
     {
         private ScreenStack screenStack;
 
+        private string totalString = "";
+
         public SushiStopClient(IPAddress address, int port, ScreenStack screenStack)
             : base(address, port)
         {
@@ -22,9 +26,21 @@ namespace SushiStop.Game.Networking
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
             string messageString = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
+            Logger.Log("Received fragment: " + messageString);
+            totalString += messageString;
 
-            TcpMessage message = JsonConvert.DeserializeObject<TcpMessage>(messageString,
-                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+            TcpMessage message;
+            try
+            {
+                message = JsonConvert.DeserializeObject<TcpMessage>(totalString,
+                    new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+            }
+            catch (Exception)
+            {
+                return; // Stop and allow totalstring to keep building until it's a valid message
+            }
+
+            totalString = ""; // We created a valid message so we can reset this
             if (message == null)
                 return;
 

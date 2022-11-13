@@ -111,6 +111,7 @@ namespace SushiStop.Server
                         Type = TcpMessageType.NextTurn,
                         Players = server.Players
                     }, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All }));
+
                     break;
 
                 case TcpMessageType.EndTurn:
